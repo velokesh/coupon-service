@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Models\ContextAttributes.cs" />
+    <Compile Remove="Models\CouponsCashbackSearch.cs" />
+    <Compile Remove="Models\CouponSearch.cs" />
+    <Compile Remove="Models\GlobalProductCouponsFilter.cs" />
+    <Compile Remove="Models\IQuotientSearchable.cs" />
+    <Compile Remove="Models\Offer.cs" />
+    <Compile Remove="Models\OfferBuy.cs" />
+    <Compile Remove="Models\OfferGet.cs" />
+    <Compile Remove="Models\OfferGroup.cs" />
+    <Compile Remove="Models\OfferGroupItem.cs" />
+    <Compile Remove="Models\RecommendedCouponSearchRequest.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+</Project>

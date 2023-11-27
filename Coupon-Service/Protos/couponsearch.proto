@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+option csharp_namespace = "Coupon_Service.Protos";
+
+
+package Coupon.API;
+
+service CouponSearchService {
+	rpc SearchCoupons(CouponFilterRequest) returns (FilteredCoupons);
+}
+
+message CouponFilterRequest {
+}
+
+message FilteredCoupons {
+}

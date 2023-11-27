@@ -1,0 +1,193 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\velokesh\\Desktop\\Coupon-Service\\Coupon.Infrastructure\\Coupon.Infrastructure.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\velokesh\\Desktop\\Coupon-Service\\Coupon.Application\\Coupon.Application.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\velokesh\\Desktop\\Coupon-Service\\Coupon.Application\\Coupon.Application.csproj",
+        "projectName": "Coupon.Application",
+        "projectPath": "C:\\Users\\velokesh\\Desktop\\Coupon-Service\\Coupon.Application\\Coupon.Application.csproj",
+        "packagesPath": "C:\\Users\\velokesh\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\velokesh\\Desktop\\Coupon-Service\\Coupon.Application\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\velokesh\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net7.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net7.0": {
+            "targetAlias": "net7.0",
+            "projectReferences": {
+              "C:\\Users\\velokesh\\Desktop\\Coupon-Service\\Coupon.Domain\\Coupon.Domain.csproj": {
+                "projectPath": "C:\\Users\\velokesh\\Desktop\\Coupon-Service\\Coupon.Domain\\Coupon.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net7.0": {
+          "targetAlias": "net7.0",
+          "dependencies": {
+            "MediatR": {
+              "target": "Package",
+              "version": "[12.2.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\velokesh\\Desktop\\Coupon-Service\\Coupon.Domain\\Coupon.Domain.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\velokesh\\Desktop\\Coupon-Service\\Coupon.Domain\\Coupon.Domain.csproj",
+        "projectName": "Coupon.Domain",
+        "projectPath": "C:\\Users\\velokesh\\Desktop\\Coupon-Service\\Coupon.Domain\\Coupon.Domain.csproj",
+        "packagesPath": "C:\\Users\\velokesh\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\velokesh\\Desktop\\Coupon-Service\\Coupon.Domain\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\velokesh\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net7.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net7.0": {
+            "targetAlias": "net7.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net7.0": {
+          "targetAlias": "net7.0",
+          "dependencies": {
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\velokesh\\Desktop\\Coupon-Service\\Coupon.Infrastructure\\Coupon.Infrastructure.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\velokesh\\Desktop\\Coupon-Service\\Coupon.Infrastructure\\Coupon.Infrastructure.csproj",
+        "projectName": "Coupon.Infrastructure",
+        "projectPath": "C:\\Users\\velokesh\\Desktop\\Coupon-Service\\Coupon.Infrastructure\\Coupon.Infrastructure.csproj",
+        "packagesPath": "C:\\Users\\velokesh\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\velokesh\\Desktop\\Coupon-Service\\Coupon.Infrastructure\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\velokesh\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net7.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net7.0": {
+            "targetAlias": "net7.0",
+            "projectReferences": {
+              "C:\\Users\\velokesh\\Desktop\\Coupon-Service\\Coupon.Application\\Coupon.Application.csproj": {
+                "projectPath": "C:\\Users\\velokesh\\Desktop\\Coupon-Service\\Coupon.Application\\Coupon.Application.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net7.0": {
+          "targetAlias": "net7.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
