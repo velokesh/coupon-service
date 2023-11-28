@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Coupon_Service.Protos;
+using Google.Protobuf.WellKnownTypes;
 
 namespace Coupon_Service.Mapper
 {
@@ -23,9 +24,9 @@ namespace Coupon_Service.Mapper
                 ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
             CreateMap<Coupon.Domain.Models.BaseCoupon, BaseCoupon>()
-                .ForMember(dest => dest.ActivationDate, opts => opts.MapFrom(src => src.ActivationDate.ToString("s")))
-                .ForMember(dest => dest.OfferActivationDate, opts => opts.MapFrom(src => src.OfferActivationDate.ToString("s")))
-                .ForMember(dest => dest.OfferExpirationDate, opts => opts.MapFrom(src => src.OfferExpirationDate.ToString("s")))
+                .ForMember(dest => dest.ActivationDate, opts => opts.MapFrom(src => Timestamp.FromDateTime(DateTime.SpecifyKind(src.ActivationDate, DateTimeKind.Utc))))
+                .ForMember(dest => dest.OfferActivationDate, opts => opts.MapFrom(src => Timestamp.FromDateTime(DateTime.SpecifyKind(src.OfferActivationDate, DateTimeKind.Utc))))
+                .ForMember(dest => dest.OfferExpirationDate, opts => opts.MapFrom(src => Timestamp.FromDateTime(DateTime.SpecifyKind(src.OfferExpirationDate, DateTimeKind.Utc))))
                 .ReverseMap()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
         }

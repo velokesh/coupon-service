@@ -2,7 +2,6 @@ syntax = "proto3";
 
 import "Protos/google/api/annotations.proto";
 
-
 option csharp_namespace = "Coupon_Service.Protos";
 
 package Coupon.API;
@@ -133,8 +132,8 @@ message BaseCoupon{
     string OfferType = 10;
     int32 IsManufacturerCoupon = 11;
     string RecemptionFrequency = 12;
-    string OfferActivationDate = 13;
-    string OfferExpirationDate = 14;
+    google.protobuf.Timestamp OfferActivationDate = 13;
+    google.protobuf.Timestamp OfferExpirationDate = 14;
     string OfferDescription = 15;
     string OfferDisclaimer = 16;
     string OfferFeaturedText = 17;
@@ -145,7 +144,7 @@ message BaseCoupon{
     string MinQuantityDescription = 22;
     string OfferSummary = 23;
     int32 IsAutoActivated = 24;
-    string ActivationDate = 25;
+    google.protobuf.Timestamp ActivationDate = 25;
     string AssociationCode = 26;
     int32 RedemptionLimitQuantity = 27;
     int32 MinBasketValue = 28; // its decimal type
