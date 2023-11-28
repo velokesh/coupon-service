@@ -2,11 +2,8 @@
 using Coupon.Application;
 using Coupon.Infrastructure;
 using Coupon_Service.Services;
-using Google.Api;
-using Google.Cloud.Logging.NLog;
 using Microsoft.OpenApi.Models;
 using NLog;
-using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 var logger = LogManager.LoadConfiguration("nlog.xml").GetCurrentClassLogger();
@@ -36,7 +33,6 @@ try
     });
     builder.Services.AddCouponInfrastructureServices();
     builder.Services.AddCouponApplicationServices();
-    builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
     builder.Services.AddAutoMapper(typeof(Coupon_Service.Mapper.Mapping).Assembly);
     builder.Services.AddLoggingServiceV2Client();
     //builder.Services.AddLogging(loggingBuilder =>

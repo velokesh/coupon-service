@@ -1,10 +1,10 @@
 ﻿#region References
 using AutoFixture;
 using AutoFixture.NUnit3;
+using Coupon.Application.Interfaces;
 using Coupon.Domain.Models;
 using Coupon_Service.Services;
 using Grpc.Core;
-using MediatR;
 using Moq;
 #endregion
 
@@ -16,7 +16,7 @@ namespace Coupon.Api.Tests
         [Test, CustomAutoData()]
         public async Task GetRecommendedCoupons_ValidInput_ShouldReturnSuccessResponse(
             Fixture fixture,
-            [Frozen] IMediator mediator,
+            [Frozen] IQueryHandler<RecommendedCouponDTO, Task<FilteredCoupon>> getRecommendedCouponsQueryHandler,
             CouponSortService couponSortService)
         {
             var request = fixture
@@ -26,8 +26,8 @@ namespace Coupon.Api.Tests
             var result = fixture.Build<FilteredCoupon>()
                 .Create();
 
-            Mock.Get(mediator)
-                .Setup(x => x.Send(It.IsAny<IRequest<FilteredCoupon>>(), default))
+            Mock.Get(getRecommendedCouponsQueryHandler)
+                .Setup(x => x.ExecuteQuery(It.IsAny<RecommendedCouponDTO>()))
                 .ReturnsAsync(result);
 
             var response = await couponSortService

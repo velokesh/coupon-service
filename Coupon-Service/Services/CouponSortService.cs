@@ -1,9 +1,10 @@
 ﻿#region References
 using AutoMapper;
-using Coupon.Application.Queries;
+using Coupon.Application.Interfaces;
+using Coupon.Domain.Models;
 using Coupon_Service.Protos;
 using Grpc.Core;
-using MediatR;
+using FilteredCoupon = Coupon_Service.Protos.FilteredCoupon;
 #endregion
 
 namespace Coupon_Service.Services
@@ -13,7 +14,7 @@ namespace Coupon_Service.Services
         #region Declarations
         private readonly ILogger<CouponSortService> _logger;
         private readonly IMapper _mapper;
-        private readonly IMediator _mediator;
+        private readonly IQueryHandler<RecommendedCouponDTO, Task<Coupon.Domain.Models.FilteredCoupon>> _getRecommendedCoupons;
         #endregion
 
         #region Public Memebers
@@ -27,10 +28,10 @@ namespace Coupon_Service.Services
         public CouponSortService(
             ILogger<CouponSortService> logger,
             IMapper mapper,
-            IMediator mediator)
+            IQueryHandler<RecommendedCouponDTO, Task<Coupon.Domain.Models.FilteredCoupon>> getRecommendedCoupons)
         {
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-            _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+            _getRecommendedCoupons = getRecommendedCoupons ?? throw new ArgumentNullException(nameof(getRecommendedCoupons));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -51,9 +52,8 @@ namespace Coupon_Service.Services
             FilteredCoupon filteredCoupon = new();
             try
             {
-                var couponRequestModel = _mapper.Map<Coupon.Domain.Models.RecommendedCouponDTO>(request);
-                var query = new GetRecommendedCouponsQuery(couponRequestModel);
-                var responseData = await _mediator.Send(query);
+                var couponRequestModel = _mapper.Map<RecommendedCouponDTO>(request);
+                var responseData = await _getRecommendedCoupons.ExecuteQuery(couponRequestModel);
 
                 filteredCoupon = _mapper.Map<FilteredCoupon>(responseData);
                 return filteredCoupon;

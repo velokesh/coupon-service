@@ -11,9 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Coupon.Domain", "Coupon.Dom
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Coupon.Infrastructure", "Coupon.Infrastructure\Coupon.Infrastructure.csproj", "{950F0E3F-9870-4BBC-8E3C-351467F48CE0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Coupon.Test", "Coupon.Test\Coupon.Test.csproj", "{D3DBA2B0-81F1-4040-B4CD-208B926D9C6F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Coupon.Api.Tests", "Coupon.Api.Tests\Coupon.Api.Tests.csproj", "{6E87909B-77F1-45F5-869F-18E3EC21829E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Coupon.Api.Tests", "Coupon.Api.Tests\Coupon.Api.Tests.csproj", "{6E87909B-77F1-45F5-869F-18E3EC21829E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,10 +35,6 @@ Global
 		{950F0E3F-9870-4BBC-8E3C-351467F48CE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{950F0E3F-9870-4BBC-8E3C-351467F48CE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{950F0E3F-9870-4BBC-8E3C-351467F48CE0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D3DBA2B0-81F1-4040-B4CD-208B926D9C6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D3DBA2B0-81F1-4040-B4CD-208B926D9C6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D3DBA2B0-81F1-4040-B4CD-208B926D9C6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D3DBA2B0-81F1-4040-B4CD-208B926D9C6F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6E87909B-77F1-45F5-869F-18E3EC21829E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6E87909B-77F1-45F5-869F-18E3EC21829E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E87909B-77F1-45F5-869F-18E3EC21829E}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -1,13 +1,13 @@
 ﻿#region References
 using Coupon.Application.Contracts;
+using Coupon.Application.Interfaces;
 using Coupon.Domain.Models;
-using MediatR;
 using Microsoft.Extensions.Logging;
 #endregion
 
 namespace Coupon.Application.Queries
 {
-    public class GetRecommendedCouponsQueryHandler : IRequestHandler<GetRecommendedCouponsQuery, FilteredCoupon>
+    public class GetRecommendedCouponsQueryHandler : IQueryHandler<RecommendedCouponDTO, Task<FilteredCoupon>>
     {
         #region References
         private readonly ILogger<GetRecommendedCouponsQueryHandler> _logger;
@@ -17,7 +17,7 @@ namespace Coupon.Application.Queries
         #region Public Members
         public GetRecommendedCouponsQueryHandler(
             ILogger<GetRecommendedCouponsQueryHandler> logger,
-            ICouponRepository couponRepository) 
+            ICouponRepository couponRepository)
         {
             _logger = logger;
             _couponRepository = couponRepository;
@@ -27,19 +27,18 @@ namespace Coupon.Application.Queries
         /// Gets Recommended Coupons
         /// </summary>
         /// <param name="request"></param>
-        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task<FilteredCoupon> Handle(
-            GetRecommendedCouponsQuery request,
-            CancellationToken cancellationToken)
+        public async Task<FilteredCoupon> ExecuteQuery(
+            RecommendedCouponDTO request)
         {
             _logger.LogInformation("GetRecommendedCouponsQueryHandler triggered to retrieve recommended coupons");
 
-            return new FilteredCoupon() { 
+            return new FilteredCoupon()
+            {
                 Coupons = new List<BaseCoupon>(),
                 Brands = new List<CouponBrand>(),
                 Category = new List<CouponCategory>(),
-                PaginationInfo = new CouponPagination() { StartRecord=10, TotalRecords=10, ExpectedRecordsPerPage=10, TotalRecordsPerPage=5}
+                PaginationInfo = new CouponPagination() { StartRecord = 10, TotalRecords = 10, ExpectedRecordsPerPage = 10, TotalRecordsPerPage = 5 }
             };
 
             //To-Do call Data layer

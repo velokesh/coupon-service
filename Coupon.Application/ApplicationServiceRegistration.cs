@@ -1,7 +1,9 @@
-﻿using MediatR;
+﻿#region References
+using Coupon.Application.Interfaces;
+using Coupon.Application.Queries;
+using Coupon.Domain.Models;
 using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
-
+#endregion
 
 namespace Coupon.Application
 {
@@ -9,7 +11,10 @@ namespace Coupon.Application
     {
         public static IServiceCollection AddCouponApplicationServices(this IServiceCollection services)
         {
-            services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
+
+            //Dependency Injections
+            services.AddScoped<IQueryHandler<RecommendedCouponDTO, Task<FilteredCoupon>>, GetRecommendedCouponsQueryHandler>();
+
             return services;
         }
     }

@@ -14,7 +14,6 @@ namespace Coupon.Infrastructure
     {
         public static IServiceCollection AddCouponInfrastructureServices(this IServiceCollection services)
         {
-            services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
             services.AddScoped<ICouponRepository, CouponRepository>();
             return services;
         }
