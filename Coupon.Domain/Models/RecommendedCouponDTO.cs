@@ -77,7 +77,7 @@ namespace Coupon.Domain.Models
         /// <summary>
         /// IncludeClippedCategories
         /// </summary>
-        [JsonProperty(PropertyName = "IncludeClippedCategories")]
+        //[JsonProperty(PropertyName = "IncludeClippedCategories")]
         public bool IncludeClippedCategories { get; set; }
 
         /// <summary>

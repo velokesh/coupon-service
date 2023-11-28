@@ -1,25 +1,40 @@
-﻿using Coupon.Application.Contracts;
+﻿#region References
+using Coupon.Application.Contracts;
 using Coupon.Domain.Models;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+#endregion
 
 namespace Coupon.Application.Queries
 {
     public class GetRecommendedCouponsQueryHandler : IRequestHandler<GetRecommendedCouponsQuery, FilteredCoupon>
     {
+        #region References
+        private readonly ILogger<GetRecommendedCouponsQueryHandler> _logger;
         private readonly ICouponRepository _couponRepository;
+        #endregion
 
-        public GetRecommendedCouponsQueryHandler(ICouponRepository couponRepository) 
+        #region Public Members
+        public GetRecommendedCouponsQueryHandler(
+            ILogger<GetRecommendedCouponsQueryHandler> logger,
+            ICouponRepository couponRepository) 
         {
+            _logger = logger;
             _couponRepository = couponRepository;
         }
 
-        public async Task<FilteredCoupon> Handle(GetRecommendedCouponsQuery request, CancellationToken cancellationToken)
+        /// <summary>
+        /// Gets Recommended Coupons
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public async Task<FilteredCoupon> Handle(
+            GetRecommendedCouponsQuery request,
+            CancellationToken cancellationToken)
         {
+            _logger.LogInformation("GetRecommendedCouponsQueryHandler triggered to retrieve recommended coupons");
+
             return new FilteredCoupon() { 
                 Coupons = new List<BaseCoupon>(),
                 Brands = new List<CouponBrand>(),
@@ -30,6 +45,8 @@ namespace Coupon.Application.Queries
             //To-Do call Data layer
             //return await _couponRepository.GetRecommendedCouponsData(request);
         }
+
+        #endregion
 
     }
 }

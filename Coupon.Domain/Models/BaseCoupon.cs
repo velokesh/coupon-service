@@ -96,7 +96,7 @@ namespace Coupon.Domain.Models
         [JsonProperty("expiryLabel", NullValueHandling = NullValueHandling.Ignore)]
         public string ExpiryLabel { get; set; } = null;
 
-        public bool IsCasback()
+        public bool IsCashback()
         {
             return OfferSourceType == OfferSourceType.Cashback;
         }

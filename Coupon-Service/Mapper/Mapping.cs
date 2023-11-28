@@ -10,7 +10,7 @@ namespace Coupon_Service.Mapper
             CreateMap<RecommendedCouponSearchRequest, Coupon.Domain.Models.RecommendedCouponDTO>().ReverseMap().
                 ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
-            CreateMap<Coupon.Domain.Models.FilteredCoupon, FilteredCoupon>().ReverseMap().
+            CreateMap<Coupon.Domain.Models.FilteredCoupon, FilteredCoupon>().ReverseMap().                
                 ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
             CreateMap<Coupon.Domain.Models.CouponPagination, CouponPagination>().ReverseMap().
@@ -22,8 +22,12 @@ namespace Coupon_Service.Mapper
             CreateMap<Coupon.Domain.Models.CouponBrand, CouponBrand>().ReverseMap().
                 ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
-            CreateMap<Coupon.Domain.Models.BaseCoupon, BaseCoupon>().ReverseMap().
-                ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+            CreateMap<Coupon.Domain.Models.BaseCoupon, BaseCoupon>()
+                .ForMember(dest => dest.ActivationDate, opts => opts.MapFrom(src => src.ActivationDate.ToString("s")))
+                .ForMember(dest => dest.OfferActivationDate, opts => opts.MapFrom(src => src.OfferActivationDate.ToString("s")))
+                .ForMember(dest => dest.OfferExpirationDate, opts => opts.MapFrom(src => src.OfferExpirationDate.ToString("s")))
+                .ReverseMap()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
         }
     }
 
