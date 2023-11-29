@@ -1,22 +1,16 @@
 ﻿using Coupon.Domain.Enums;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Coupon.Domain.Models
 {
-    public abstract class BaseCoupon
+    public class BaseCoupon
     {
-
         public int DiscountIndicator { get; set; }
         public CouponSource CouponType { get; set; }
 
-        public OfferSourceType OfferSourceType { get; set; }
+        public OfferSourceType OfferSourceType { get; set; } 
 
-        public List<long> UPCs { get; set; }
+        public List<long> UPCs { get; set; } = [];
         public string TargetType { get; set; }
 
         public string OfferCode { get; set; }

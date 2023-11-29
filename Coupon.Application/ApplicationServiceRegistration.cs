@@ -11,6 +11,7 @@ namespace Coupon.Application
     {
         public static IServiceCollection AddCouponApplicationServices(this IServiceCollection services)
         {
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             //Dependency Injections
             services.AddScoped<IQueryHandler<RecommendedCouponDTO, Task<FilteredCoupon>>, GetRecommendedCouponsQueryHandler>();

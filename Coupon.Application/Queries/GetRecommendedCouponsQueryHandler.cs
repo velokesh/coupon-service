@@ -1,7 +1,9 @@
 ﻿#region References
+using AutoMapper;
 using Coupon.Application.Interfaces;
 using Coupon.Domain.Models;
-using Coupon.Infrastructure.Repositories.Interaces;
+using Coupon.Infrastructure.Repositories.DTO;
+using Coupon.Infrastructure.Repositories.Interfaces;
 using Microsoft.Extensions.Logging;
 #endregion
 
@@ -11,16 +13,19 @@ namespace Coupon.Application.Queries
     {
         #region References
         private readonly ILogger<GetRecommendedCouponsQueryHandler> _logger;
-        private readonly ICouponRepository _couponRepository;
+        private readonly IMapper _mapper;
+        private readonly ICouponOperation _couponOperation;
         #endregion
 
         #region Public Members
         public GetRecommendedCouponsQueryHandler(
             ILogger<GetRecommendedCouponsQueryHandler> logger,
-            ICouponRepository couponRepository)
+            IMapper mapper,
+            ICouponOperation couponOperation)
         {
             _logger = logger;
-            _couponRepository = couponRepository;
+            _mapper = mapper;
+            _couponOperation = couponOperation;
         }
 
         /// <summary>
@@ -33,16 +38,20 @@ namespace Coupon.Application.Queries
         {
             _logger.LogInformation("GetRecommendedCouponsQueryHandler triggered to retrieve recommended coupons");
 
+            var coupons = await _couponOperation.GetCoupons();
+
             return new FilteredCoupon()
             {
-                Coupons = new List<BaseCoupon>(),
+                Coupons = _mapper.Map<List<OfferInformation>, List<BaseCoupon>>(coupons.ToList()),
                 Brands = new List<CouponBrand>(),
                 Category = new List<CouponCategory>(),
-                PaginationInfo = new CouponPagination() { StartRecord = 10, TotalRecords = 10, ExpectedRecordsPerPage = 10, TotalRecordsPerPage = 5 }
+                PaginationInfo = new CouponPagination() {
+                    StartRecord = 10,
+                    TotalRecords = coupons.Count(),
+                    ExpectedRecordsPerPage = 10,
+                    TotalRecordsPerPage = 5
+                }
             };
-
-            //To-Do call Data layer
-            //return await _couponRepository.GetRecommendedCouponsData(request);
         }
 
         #endregion

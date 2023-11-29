@@ -1,5 +1,5 @@
 ﻿using Coupon.Infrastructure.Repositories.Implementation;
-using Coupon.Infrastructure.Repositories.Interaces;
+using Coupon.Infrastructure.Repositories.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Coupon.Infrastructure
@@ -8,7 +8,10 @@ namespace Coupon.Infrastructure
     {
         public static IServiceCollection AddCouponInfrastructureServices(this IServiceCollection services)
         {
-            services.AddScoped<ICouponRepository, CouponRepository>();
+            Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
+
+            services.AddScoped<ICouponOperation, CouponOperation>();
+
             return services;
         }
     }

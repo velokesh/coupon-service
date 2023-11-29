@@ -8,6 +8,7 @@ package Coupon.API;
 
 
 import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
 
 service CouponSortService {
 	rpc GetRecommendedCoupons(RecommendedCouponSearchRequest) returns (FilteredCoupon){
@@ -157,7 +158,7 @@ message BaseCoupon{
     bool isProductEligible = 35; //UpcCount > 0;
     string OfferToken = 36;
     // Offer DGDiscount = 37; // Not needed for this API
-    string expiryLabel =37;
+    google.protobuf.StringValue expiryLabel =37;
     bool IsCasback = 38;//OfferSourceType == OfferSourceType.Cashback
     bool IsBasketLevel = 39;
 }

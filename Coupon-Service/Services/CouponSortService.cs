@@ -58,9 +58,9 @@ namespace Coupon_Service.Services
                 filteredCoupon = _mapper.Map<FilteredCoupon>(responseData);
                 return filteredCoupon;
             }
-            catch
+            catch(Exception ex)
             {
-                _logger.LogError("----- Error in GetRecommendedCoupons service");
+                _logger.LogError("----- Error in GetRecommendedCoupons service {msg}", ex.Message);
                 return filteredCoupon;
             }
         }
