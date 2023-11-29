@@ -27,8 +27,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Coupon.Application\Coupon.Application.csproj" />
-    <ProjectReference Include="..\Coupon.Domain\Coupon.Domain.csproj" />
-    <ProjectReference Include="..\Coupon.Infrastructure\Coupon.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

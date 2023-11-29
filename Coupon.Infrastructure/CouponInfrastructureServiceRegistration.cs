@@ -1,12 +1,6 @@
-﻿using Coupon.Application.Contracts;
-using Coupon.Infrastructure.Repositories;
+﻿using Coupon.Infrastructure.Repositories.Implementation;
+using Coupon.Infrastructure.Repositories.Interaces;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Coupon.Infrastructure
 {

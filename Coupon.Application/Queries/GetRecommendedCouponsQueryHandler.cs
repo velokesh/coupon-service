@@ -1,7 +1,7 @@
 ﻿#region References
-using Coupon.Application.Contracts;
 using Coupon.Application.Interfaces;
 using Coupon.Domain.Models;
+using Coupon.Infrastructure.Repositories.Interaces;
 using Microsoft.Extensions.Logging;
 #endregion
 
