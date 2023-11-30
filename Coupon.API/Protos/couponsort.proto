@@ -2,7 +2,7 @@ syntax = "proto3";
 
 import "Protos/google/api/annotations.proto";
 
-option csharp_namespace = "Coupon_Service.Protos";
+option csharp_namespace = "Coupon.API.Protos";
 
 package Coupon.API;
 

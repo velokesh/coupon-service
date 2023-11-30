@@ -1,7 +1,7 @@
 
 using Coupon.Application;
 using Coupon.Infrastructure;
-using Coupon_Service.Services;
+using Coupon.API.Services;
 using Microsoft.OpenApi.Models;
 using NLog;
 

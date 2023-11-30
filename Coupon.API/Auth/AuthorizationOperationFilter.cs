@@ -1,6 +1,6 @@
 ﻿using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace Coupon_Service.Auth
+namespace Coupon.API.Auth
 {
     public class AuthorizationOperationFilter  //IOperationFilter
     {

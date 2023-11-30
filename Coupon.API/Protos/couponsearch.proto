@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option csharp_namespace = "Coupon_Service.Protos";
+option csharp_namespace = "Coupon.API.Protos";
 
 
 package Coupon.API;

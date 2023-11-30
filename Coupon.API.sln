@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34202.233
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Coupon.API", "Coupon-Service\Coupon.API.csproj", "{599DE3BB-E31B-4AEA-BF54-A4D75D1C1F5F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Coupon.API", "Coupon.API\Coupon.API.csproj", "{599DE3BB-E31B-4AEA-BF54-A4D75D1C1F5F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Coupon.Application", "Coupon.Application\Coupon.Application.csproj", "{6F1057A1-E5AC-4CE5-B4E8-AB3A49A0FC47}"
 EndProject

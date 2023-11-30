@@ -2,12 +2,12 @@
 using AutoMapper;
 using Coupon.Application.Interfaces;
 using Coupon.Domain.Models;
-using Coupon_Service.Protos;
+using Coupon.API.Protos;
 using Grpc.Core;
-using FilteredCoupon = Coupon_Service.Protos.FilteredCoupon;
+using FilteredCoupon = Coupon.API.Protos.FilteredCoupon;
 #endregion
 
-namespace Coupon_Service.Services
+namespace Coupon.API.Services
 {
     public class CouponSortService : Protos.CouponSortService.CouponSortServiceBase
     {

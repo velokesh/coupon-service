@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Coupon_Service.Protos;
+using Coupon.API.Protos;
 using Google.Protobuf.WellKnownTypes;
 
 namespace Coupon_Service.Mapper

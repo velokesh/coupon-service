@@ -4,7 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>Coupon_Service</RootNamespace>
+    <RootNamespace>Coupon.API</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

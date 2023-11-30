@@ -1,4 +1,4 @@
-﻿namespace Coupon_Service.Services
+﻿namespace Coupon.API.Services
 {
     public class CouponSearchService : Protos.CouponSearchService.CouponSearchServiceBase 
     {

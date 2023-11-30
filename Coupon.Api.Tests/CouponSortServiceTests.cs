@@ -3,7 +3,7 @@ using AutoFixture;
 using AutoFixture.NUnit3;
 using Coupon.Application.Interfaces;
 using Coupon.Domain.Models;
-using Coupon_Service.Services;
+using Coupon.API.Services;
 using Grpc.Core;
 using Moq;
 #endregion
@@ -20,7 +20,7 @@ namespace Coupon.Api.Tests
             CouponSortService couponSortService)
         {
             var request = fixture
-                .Build<Coupon_Service.Protos.RecommendedCouponSearchRequest>()
+                .Build<API.Protos.RecommendedCouponSearchRequest>()
                 .Create();
 
             var result = fixture.Build<FilteredCoupon>()
