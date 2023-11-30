@@ -10,7 +10,7 @@ namespace Coupon.Application.Mappers
     {
         public CouponMapper()
         {
-            CreateMap<OfferInformation, BaseCoupon>()
+            CreateMap<Coupon, BaseCoupon>()
                 .ForMember(dest => dest.CouponType, opt => opt.MapFrom(src => CouponSource.None))
                 .ForMember(dest => dest.UPCs, opt => opt.Ignore())
                 .ForMember(dest => dest.IsManufacturerCoupon, opt => opt.MapFrom(src => CheckIsMFGCoupon(src.OfferCd)))

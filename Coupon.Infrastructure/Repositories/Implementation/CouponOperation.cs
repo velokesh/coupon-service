@@ -16,19 +16,19 @@ namespace Coupon.Infrastructure.Repositories.Implementation
             _db = new NpgsqlConnection(configuration.GetConnectionString("CouponDb"));
         }
 
-        public async Task<IEnumerable<OfferInformation>> GetCoupons()
+        public async Task<IEnumerable<DTO.Coupon>> GetCoupons()
         {
             var sqlQuery = @"SELECT offer.*, offer.OFFER_ID as splitPoint, upc.*
                 FROM dollargeneral.coupon offer 
                 INNER JOIN dollargeneral.coupon_upc_xr_t upc ON offer.OFFER_ID = upc.OFFER_ID
                 INNER JOIN dollargeneral.item_mst_t item ON upc.UPC = item.UPC";
 
-            var offerDictionary = new Dictionary<string, OfferInformation>();
+            var offerDictionary = new Dictionary<string, DTO.Coupon>();
             return (await _db.
-                QueryAsync<OfferInformation, CouponUpc, OfferInformation>(sqlQuery,
+                QueryAsync<Coupon, CouponUpc, Coupon>(sqlQuery,
                 (offerInfo, upc) =>
                 {
-                    if (!offerDictionary.TryGetValue(offerInfo.OfferId, out OfferInformation? offer))
+                    if (!offerDictionary.TryGetValue(offerInfo.OfferId, out Coupon? offer))
                     {
                         offer = offerInfo;
                         offerInfo.Upcs = [];

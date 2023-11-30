@@ -1,8 +1,8 @@
 ﻿namespace Coupon.Infrastructure.Repositories.DTO
 {
-    public class OfferInformation
+    public class Coupon
     {
-        public OfferInformation() { 
+        public Coupon() { 
             Upcs = [];
         }
 

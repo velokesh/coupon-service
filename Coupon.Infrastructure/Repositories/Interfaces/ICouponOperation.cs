@@ -4,6 +4,6 @@ namespace Coupon.Infrastructure.Repositories.Interfaces
 {
     public interface ICouponOperation
     {
-        Task<IEnumerable<OfferInformation>> GetCoupons();
+        Task<IEnumerable<DTO.Coupon>> GetCoupons();
     }
 }
