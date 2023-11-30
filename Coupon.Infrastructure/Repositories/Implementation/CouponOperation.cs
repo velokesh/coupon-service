@@ -19,9 +19,9 @@ namespace Coupon.Infrastructure.Repositories.Implementation
         public async Task<IEnumerable<OfferInformation>> GetCoupons()
         {
             var sqlQuery = @"SELECT offer.*, offer.OFFER_ID as splitPoint, upc.*
-                FROM dollargeneral.offer_information_t offer 
-                INNER JOIN dollargeneral.coupon_upc_xr_t upc ON offer.OFFER_ID = upc.OFFR_ID
-                INNER JOIN dollargeneral.item_mst_t item ON upc.UPC_12 = item.UPC::text";
+                FROM dollargeneral.coupon offer 
+                INNER JOIN dollargeneral.coupon_upc_xr_t upc ON offer.OFFER_ID = upc.OFFER_ID
+                INNER JOIN dollargeneral.item_mst_t item ON upc.UPC = item.UPC";
 
             var offerDictionary = new Dictionary<string, OfferInformation>();
             return (await _db.
@@ -31,7 +31,7 @@ namespace Coupon.Infrastructure.Repositories.Implementation
                     if (!offerDictionary.TryGetValue(offerInfo.OfferId, out OfferInformation? offer))
                     {
                         offer = offerInfo;
-                        offerInfo.Upcs = new List<CouponUpc>();
+                        offerInfo.Upcs = [];
                         offerDictionary.Add(offerInfo.OfferId, offer);
                     }
                     if (upc != null)

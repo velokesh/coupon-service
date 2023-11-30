@@ -2,7 +2,7 @@
 {
     public class CouponUpc
     {
-        public string OffrId { get; set; } = null!;
-        public string Upc12 { get; set; } = null!;
+        public string OfferId { get; set; } = null!;
+        public string Upc { get; set; } = null!;
     }
 }

@@ -7,8 +7,8 @@
         }
 
         public string OfferId { get; set; } = null!;
-        public string OffrImg1 { get; set; } = null!;
-        public string OffrImg2 { get; set; } = null!;
+        public string OfferImg1 { get; set; } = null!;
+        public string OfferImg2 { get; set; } = null!;
         public string OfferType { get; set; } = null!;
         public string RedemptionFreq { get; set; } = null!;
         public string OfferUpc { get; set; } = null!;
@@ -31,7 +31,7 @@
         public string Visible { get; set; } = null!;
         public DateTime ActivationDt { get; set; }
         public DateTime RedemptionDt { get; set; }
-        public string OffrAssnCd { get; set; } = null!;
+        public string OfferAssnCd { get; set; } = null!;
         public int? RedemptionLimitQty { get; set; }
         public decimal? MinBasketValue { get; set; }
         public int? MinTripCount { get; set; }
