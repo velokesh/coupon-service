@@ -14,7 +14,7 @@ namespace Coupon.API.Services
         #region Declarations
         private readonly ILogger<CouponSortService> _logger;
         private readonly IMapper _mapper;
-        private readonly IQueryHandler<RecommendedCouponDTO, Task<Coupon.Domain.Models.FilteredCoupon>> _getRecommendedCoupons;
+        private readonly IQueryHandler<RecommendedCouponDTO, Domain.Models.FilteredCoupon> _getRecommendedCoupons;
         #endregion
 
         #region Public Memebers
@@ -28,7 +28,7 @@ namespace Coupon.API.Services
         public CouponSortService(
             ILogger<CouponSortService> logger,
             IMapper mapper,
-            IQueryHandler<RecommendedCouponDTO, Task<Coupon.Domain.Models.FilteredCoupon>> getRecommendedCoupons)
+            IQueryHandler<RecommendedCouponDTO, Domain.Models.FilteredCoupon> getRecommendedCoupons)
         {
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _getRecommendedCoupons = getRecommendedCoupons ?? throw new ArgumentNullException(nameof(getRecommendedCoupons));
@@ -53,7 +53,7 @@ namespace Coupon.API.Services
             try
             {
                 var couponRequestModel = _mapper.Map<RecommendedCouponDTO>(request);
-                var responseData = await _getRecommendedCoupons.ExecuteQuery(couponRequestModel);
+                var responseData = _getRecommendedCoupons.ExecuteQuery(couponRequestModel);
 
                 filteredCoupon = _mapper.Map<FilteredCoupon>(responseData);
                 return filteredCoupon;

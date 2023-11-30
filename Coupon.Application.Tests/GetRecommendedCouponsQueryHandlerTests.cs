@@ -1,11 +1,10 @@
 ﻿#region References
 using AutoFixture;
 using AutoFixture.NUnit3;
-using Coupon.Application.Interfaces;
 using Coupon.Application.Queries;
 using Coupon.Application.Tests;
 using Coupon.Domain.Models;
-using Coupon.Infrastructure.Repositories.DTO;
+using Coupon.Infrastructure.Repositories.Database.Entities;
 using Coupon.Infrastructure.Repositories.Interfaces;
 using Moq;
 #endregion
@@ -16,7 +15,7 @@ namespace Coupon.Api.Tests
     {
         #region Get Recommended Coupons Query Handler Tests
         [Test, CustomAutoData()]
-        public async Task GetRecommendedCouponsQueryHandler_ValidInput_ShouldReturnSuccessResponse(
+        public void GetRecommendedCouponsQueryHandler_ValidInput_ShouldReturnSuccessResponse(
             Fixture fixture,
             [Frozen] ICouponOperation couponOperation,
             GetRecommendedCouponsQueryHandler getRecommendedCouponsQueryHandler)
@@ -25,14 +24,14 @@ namespace Coupon.Api.Tests
                 .Build<RecommendedCouponDTO>()
                 .Create();
 
-            var couponsResponse = fixture.Build<CouponDTO>()
+            var couponsResponse = fixture.Build<CouponInfo>()
                 .CreateMany(2);
 
             Mock.Get(couponOperation)
                 .Setup(x => x.GetCoupons())
-                .ReturnsAsync(couponsResponse);
+                .Returns(couponsResponse);
 
-            var response = await getRecommendedCouponsQueryHandler
+            var response = getRecommendedCouponsQueryHandler
                 .ExecuteQuery(request);
 
             Assert.That(response, Is.Not.Null);

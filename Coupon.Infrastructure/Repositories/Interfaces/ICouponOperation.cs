@@ -1,9 +1,9 @@
-﻿using Coupon.Infrastructure.Repositories.DTO;
+﻿using Coupon.Infrastructure.Repositories.Database.Entities;
 
 namespace Coupon.Infrastructure.Repositories.Interfaces
 {
     public interface ICouponOperation
     {
-        Task<IEnumerable<DTO.CouponDTO>> GetCoupons();
+        IEnumerable<CouponInfo> GetCoupons();
     }
 }

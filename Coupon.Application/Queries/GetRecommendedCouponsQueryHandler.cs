@@ -2,14 +2,14 @@
 using AutoMapper;
 using Coupon.Application.Interfaces;
 using Coupon.Domain.Models;
-using Coupon.Infrastructure.Repositories.DTO;
+using Coupon.Infrastructure.Repositories.Database.Entities;
 using Coupon.Infrastructure.Repositories.Interfaces;
 using Microsoft.Extensions.Logging;
 #endregion
 
 namespace Coupon.Application.Queries
 {
-    public class GetRecommendedCouponsQueryHandler : IQueryHandler<RecommendedCouponDTO, Task<FilteredCoupon>>
+    public class GetRecommendedCouponsQueryHandler : IQueryHandler<RecommendedCouponDTO, FilteredCoupon>
     {
         #region References
         private readonly ILogger<GetRecommendedCouponsQueryHandler> _logger;
@@ -33,16 +33,16 @@ namespace Coupon.Application.Queries
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public async Task<FilteredCoupon> ExecuteQuery(
+        public FilteredCoupon ExecuteQuery(
             RecommendedCouponDTO request)
         {
             _logger.LogInformation("GetRecommendedCouponsQueryHandler triggered to retrieve recommended coupons");
 
-            var coupons = await _couponOperation.GetCoupons();
+            var coupons = _couponOperation.GetCoupons();
 
             return new FilteredCoupon()
             {
-                Coupons = _mapper.Map<List<CouponDTO>, List<BaseCoupon>>(coupons.ToList()),
+                Coupons = _mapper.Map<List<CouponInfo>, List<BaseCoupon>>(coupons.ToList()),
                 Brands = new List<CouponBrand>(),
                 Category = new List<CouponCategory>(),
                 PaginationInfo = new CouponPagination() {

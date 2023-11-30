@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Coupon.Domain.Enums;
 using Coupon.Domain.Models;
-using Coupon.Infrastructure.Repositories.DTO;
+using Coupon.Infrastructure.Repositories.Database.Entities;
 using System.Text.RegularExpressions;
 
 namespace Coupon.Application.Mappers
@@ -10,7 +10,7 @@ namespace Coupon.Application.Mappers
     {
         public CouponMapper()
         {
-            CreateMap<CouponDTO, BaseCoupon>()
+            CreateMap<CouponInfo, BaseCoupon>()
                 .ForMember(dest => dest.CouponType, opt => opt.MapFrom(src => CouponSource.None))
                 .ForMember(dest => dest.UPCs, opt => opt.Ignore())
                 .ForMember(dest => dest.IsManufacturerCoupon, opt => opt.MapFrom(src => CheckIsMFGCoupon(src.OfferCd ?? string.Empty)))
@@ -43,7 +43,7 @@ namespace Coupon.Application.Mappers
                 .ForMember(dest => dest.RewardQuantity, opt => opt.MapFrom(src => src.RewardQty))
                 .ForMember(dest => dest.Visible, opt => opt.MapFrom(src => src.Visible))
                 .ForMember(dest => dest.OfferToken, opt => opt.MapFrom(src => src.OfferId))
-                .ForMember(dest => dest.ProductEligible, opt => opt.MapFrom(src => src.Upcs.Count > 0))
+                .ForMember(dest => dest.ProductEligible, opt => opt.MapFrom(src => true))
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
         }
 
