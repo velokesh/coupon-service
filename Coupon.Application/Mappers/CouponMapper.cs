@@ -10,10 +10,10 @@ namespace Coupon.Application.Mappers
     {
         public CouponMapper()
         {
-            CreateMap<Coupon, BaseCoupon>()
+            CreateMap<CouponDTO, BaseCoupon>()
                 .ForMember(dest => dest.CouponType, opt => opt.MapFrom(src => CouponSource.None))
                 .ForMember(dest => dest.UPCs, opt => opt.Ignore())
-                .ForMember(dest => dest.IsManufacturerCoupon, opt => opt.MapFrom(src => CheckIsMFGCoupon(src.OfferCd)))
+                .ForMember(dest => dest.IsManufacturerCoupon, opt => opt.MapFrom(src => CheckIsMFGCoupon(src.OfferCd ?? string.Empty)))
                 .ForMember(dest => dest.OfferSourceType, opt => opt.MapFrom(src => OfferSourceType.Coupon))
                 .ForMember(dest => dest.TargetType, opt => opt.MapFrom(src => src.TgtType))
                 .ForMember(dest => dest.OfferCode, opt => opt.MapFrom(src => src.OfferCd))
@@ -43,7 +43,8 @@ namespace Coupon.Application.Mappers
                 .ForMember(dest => dest.RewardQuantity, opt => opt.MapFrom(src => src.RewardQty))
                 .ForMember(dest => dest.Visible, opt => opt.MapFrom(src => src.Visible))
                 .ForMember(dest => dest.OfferToken, opt => opt.MapFrom(src => src.OfferId))
-                .ForMember(dest => dest.ProductEligible, opt => opt.MapFrom(src => src.Upcs.Count > 0));
+                .ForMember(dest => dest.ProductEligible, opt => opt.MapFrom(src => src.Upcs.Count > 0))
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
         }
 
         private static bool CheckIsMFGCoupon(string offerCode)

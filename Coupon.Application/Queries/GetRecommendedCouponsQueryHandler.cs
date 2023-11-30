@@ -42,7 +42,7 @@ namespace Coupon.Application.Queries
 
             return new FilteredCoupon()
             {
-                Coupons = _mapper.Map<List<Coupon>, List<BaseCoupon>>(coupons.ToList()),
+                Coupons = _mapper.Map<List<CouponDTO>, List<BaseCoupon>>(coupons.ToList()),
                 Brands = new List<CouponBrand>(),
                 Category = new List<CouponCategory>(),
                 PaginationInfo = new CouponPagination() {

@@ -16,30 +16,30 @@ namespace Coupon.Infrastructure.Repositories.Implementation
             _db = new NpgsqlConnection(configuration.GetConnectionString("CouponDb"));
         }
 
-        public async Task<IEnumerable<DTO.Coupon>> GetCoupons()
+        public async Task<IEnumerable<CouponDTO>> GetCoupons()
         {
             var sqlQuery = @"SELECT offer.*, offer.OFFER_ID as splitPoint, upc.*
                 FROM dollargeneral.coupon offer 
                 INNER JOIN dollargeneral.coupon_upc_xr_t upc ON offer.OFFER_ID = upc.OFFER_ID
                 INNER JOIN dollargeneral.item_mst_t item ON upc.UPC = item.UPC";
 
-            var offerDictionary = new Dictionary<string, DTO.Coupon>();
+            var couponDictionary = new Dictionary<string, CouponDTO>();
             return (await _db.
-                QueryAsync<Coupon, CouponUpc, Coupon>(sqlQuery,
-                (offerInfo, upc) =>
+                QueryAsync<CouponDTO, CouponUpc, CouponDTO>(sqlQuery,
+                (couponInfo, upc) =>
                 {
-                    if (!offerDictionary.TryGetValue(offerInfo.OfferId, out Coupon? offer))
+                    if (!couponDictionary.TryGetValue(couponInfo.OfferId, out CouponDTO? coupon))
                     {
-                        offer = offerInfo;
-                        offerInfo.Upcs = [];
-                        offerDictionary.Add(offerInfo.OfferId, offer);
+                        coupon = couponInfo;
+                        couponInfo.Upcs = [];
+                        couponDictionary.Add(couponInfo.OfferId, coupon);
                     }
                     if (upc != null)
                     {
-                        offer.Upcs.Add(upc);
+                        coupon.Upcs.Add(upc);
                     }
 
-                    return offer;
+                    return coupon;
                 }, splitOn: "splitPoint")).Distinct();
         }
     }
