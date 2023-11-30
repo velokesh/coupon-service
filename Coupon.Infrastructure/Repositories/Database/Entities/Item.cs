@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Coupon.Infrastructure.Repositories.Database.Entities
+﻿namespace Coupon.Infrastructure.Repositories.Database.Entities
 {
-    public class ItemMstT
+    public class Item
     {
         public long Upc { get; set; }
 

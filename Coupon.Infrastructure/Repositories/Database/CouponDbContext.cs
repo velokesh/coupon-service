@@ -16,9 +16,9 @@ namespace Coupon.Infrastructure.Repositories.Database
 
         public virtual DbSet<CouponInfo> Coupons { get; set; }
 
-        public virtual DbSet<CouponUpcXrT> CouponUpcXrTs { get; set; }
+        public virtual DbSet<CouponUpc> CouponUpcXrTs { get; set; }
 
-        public virtual DbSet<ItemMstT> ItemMstTs { get; set; }
+        public virtual DbSet<Item> ItemMstTs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -157,7 +157,7 @@ namespace Coupon.Infrastructure.Repositories.Database
                     .HasColumnName("visible");
             });
 
-            modelBuilder.Entity<CouponUpcXrT>(entity =>
+            modelBuilder.Entity<CouponUpc>(entity =>
             {
                 entity
                     .HasNoKey()
@@ -179,7 +179,7 @@ namespace Coupon.Infrastructure.Repositories.Database
                     .HasConstraintName("coupon_upc_xr_t_upc_fkey");
             });
 
-            modelBuilder.Entity<ItemMstT>(entity =>
+            modelBuilder.Entity<Item>(entity =>
             {
                 entity.HasKey(e => e.Upc).HasName("item_mst_t_pkey");
 
