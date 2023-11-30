@@ -4,8 +4,8 @@ using AutoFixture.NUnit3;
 using Coupon.Application.Queries;
 using Coupon.Application.Tests;
 using Coupon.Domain.Models;
+using Coupon.Infrastructure.Interfaces;
 using Coupon.Infrastructure.Repositories.Database.Entities;
-using Coupon.Infrastructure.Repositories.Interfaces;
 using Moq;
 #endregion
 
@@ -17,7 +17,7 @@ namespace Coupon.Api.Tests
         [Test, CustomAutoData()]
         public void GetRecommendedCouponsQueryHandler_ValidInput_ShouldReturnSuccessResponse(
             Fixture fixture,
-            [Frozen] ICouponOperation couponOperation,
+            [Frozen] ICouponRepository couponOperation,
             GetRecommendedCouponsQueryHandler getRecommendedCouponsQueryHandler)
         {
             var request = fixture

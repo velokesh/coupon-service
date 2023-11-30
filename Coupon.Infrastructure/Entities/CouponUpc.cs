@@ -1,6 +1,5 @@
 ﻿namespace Coupon.Infrastructure.Repositories.Database.Entities
 {
-
     public class CouponUpc
     {
         public string OfferId { get; set; } = null!;

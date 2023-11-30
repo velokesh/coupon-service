@@ -1,14 +1,13 @@
-﻿using Coupon.Infrastructure.Repositories.Database;
+﻿using Coupon.Infrastructure.Interfaces;
 using Coupon.Infrastructure.Repositories.Database.Entities;
-using Coupon.Infrastructure.Repositories.Interfaces;
 
-namespace Coupon.Infrastructure.Repositories.Implementation
+namespace Coupon.Infrastructure.Repositories
 {
-    public class CouponOperation : ICouponOperation
+    public class CouponRepository : ICouponRepository
     {
         private readonly CouponDbContext _dbContext;
 
-        public CouponOperation(CouponDbContext dbContext)
+        public CouponRepository(CouponDbContext dbContext)
         {
             _dbContext = dbContext;
         }

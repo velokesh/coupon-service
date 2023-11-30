@@ -1,8 +1,8 @@
 ﻿using Coupon.Infrastructure.Repositories.Database.Entities;
 
-namespace Coupon.Infrastructure.Repositories.Interfaces
+namespace Coupon.Infrastructure.Interfaces
 {
-    public interface ICouponOperation
+    public interface ICouponRepository
     {
         IEnumerable<CouponInfo> GetCoupons();
     }

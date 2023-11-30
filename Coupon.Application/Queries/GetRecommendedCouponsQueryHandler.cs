@@ -2,8 +2,8 @@
 using AutoMapper;
 using Coupon.Application.Interfaces;
 using Coupon.Domain.Models;
+using Coupon.Infrastructure.Interfaces;
 using Coupon.Infrastructure.Repositories.Database.Entities;
-using Coupon.Infrastructure.Repositories.Interfaces;
 using Microsoft.Extensions.Logging;
 #endregion
 
@@ -14,14 +14,14 @@ namespace Coupon.Application.Queries
         #region References
         private readonly ILogger<GetRecommendedCouponsQueryHandler> _logger;
         private readonly IMapper _mapper;
-        private readonly ICouponOperation _couponOperation;
+        private readonly ICouponRepository _couponOperation;
         #endregion
 
         #region Public Members
         public GetRecommendedCouponsQueryHandler(
             ILogger<GetRecommendedCouponsQueryHandler> logger,
             IMapper mapper,
-            ICouponOperation couponOperation)
+            ICouponRepository couponOperation)
         {
             _logger = logger;
             _mapper = mapper;

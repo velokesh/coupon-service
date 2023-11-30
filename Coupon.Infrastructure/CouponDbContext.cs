@@ -1,7 +1,7 @@
 ﻿using Coupon.Infrastructure.Repositories.Database.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Coupon.Infrastructure.Repositories.Database
+namespace Coupon.Infrastructure
 {
     public partial class CouponDbContext : DbContext
     {
