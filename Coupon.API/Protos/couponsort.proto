@@ -1,184 +1,42 @@
 syntax = "proto3";
 
+import "Protos/common/enums.proto";
+import "Protos/coupon.proto";
 import "Protos/google/api/annotations.proto";
-
-option csharp_namespace = "Coupon.API.Protos";
-
-package Coupon.API;
-
-
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/wrappers.proto";
+ 
+package Coupon.API;
 
+option csharp_namespace = "Coupon.API.Protos";
+ 
+ 
 service CouponSortService {
-	rpc GetRecommendedCoupons(RecommendedCouponSearchRequest) returns (FilteredCoupon){
+	rpc GetRecommendedCoupons(RecommendedCouponSearchRequest) returns (RecommendedCouponResponse){
         option (google.api.http) = {
-            post: "/sort/v3"
+            post: "/sort/v3/provider"
             body: "*"
         };
     }
 }
-
+ 
 message RecommendedCouponSearchRequest {
-    optional string UserSessionToken = 1;
-    optional int32 PageIndex = 2;
+    string UserSessionToken = 1;
+     int32 PageIndex = 2;
     int32 NumPageRecords =3; 
-    optional string CategoryName = 4;
-    optional SortByType SortBy = 5;
-    optional SortOrderType SortOrder = 6;
+     string CategoryName = 4;
+     SortByType SortBy = 5;
+     SortOrderType SortOrder = 6;
     CouponApplicationMode FilterType = 7;
     OfferSourceType OfferSourceType = 8;
-    optional MixMode MixMode = 9;
+     MixMode MixMode = 9;
     repeated  string Categories = 10;
     repeated string Brands = 11;
 }
-
-enum SortByType{
-    //for recommended & targeted coupons/offers
-        Recommended = 0;
-
-        OfferType = 1;
-
-        OfferValue = 2;
-
-        BrandName = 3;
-
-        ExpiryDate = 4;
-
-        ActiveDate = 5;
-
-        //for clipped coupons/offers
-        //grouped by category and sorted by name
-        GroupByCategory = 6;
-
-        SortByName = 7;
-
-        SortByExpiryDate = 8;   //same as 4
-
-        RecentSortAdded = 9;
-        ClipDate = 10;
-}
-
-enum SortOrderType{
-    None = 0;
-    /// <summary>
-    /// Sort by ascending order
-    /// </summary>
-    Ascending = 1;
-    /// <summary>
-    /// Sort by descending order
-    /// </summary>
-    Descending = 2;
-}
-
-enum CouponApplicationMode{
-    /// <summary>
-    /// Backwards compatibility for legacy app funcionality
-    /// </summary>
-    Old = 0;
-
-    /// <summary>
-    /// Support for the new app
-    /// </summary>
-    New = 1;
-}
-
-enum OfferSourceType{
-    /// <summary>
-    /// None
-    /// </summary>
-    Default = 0;
-
-    /// <summary>
-    /// Coupon
-    /// </summary>
-    Coupon = 1;
-
-    /// <summary>
-    /// Cashback
-    /// </summary>
-    Cashback = 2;
-}
-
-enum MixMode{
-    Mix1 = 0; // Coupons,CashBack,Coupons,CashBack
-    Mix2 = 1;// Coupons,CashBack,CashBack,Coupons,Coupons,CashBack
-    CouponsFrist = 2;
-    CashbackFirst = 3;
-}
-
-enum CouponSource{
-    Empty = 0;
-    Other = 1;
-    JFY = 2;
-}
-
-message FilteredCoupon {
+ 
+message RecommendedCouponResponse {
      repeated BaseCoupon Coupons = 1;
      repeated CouponCategory Category = 2;
      repeated CouponBrand Brands = 3;
      CouponPagination PaginationInfo = 4;
-}
-
-message BaseCoupon{
-    int32 DiscountIndicator = 1;
-    CouponSource CouponType = 2;
-    OfferSourceType OfferSourceType = 3;
-    repeated int64 UPCs = 4;
-    string TargetType = 5;
-    string OfferCode = 6;
-    string OfferId = 7;
-    string Image1 = 8;
-    string Image2 = 9;
-    string OfferType = 10;
-    int32 IsManufacturerCoupon = 11;
-    string RecemptionFrequency = 12;
-    google.protobuf.Timestamp OfferActivationDate = 13;
-    google.protobuf.Timestamp OfferExpirationDate = 14;
-    string OfferDescription = 15;
-    string OfferDisclaimer = 16;
-    string OfferFeaturedText = 17;
-    string BrandName = 18;
-    string Companyname = 19;
-    int32 TimesShopQuantity = 20;
-    int32 MinQuantity = 21;
-    string MinQuantityDescription = 22;
-    string OfferSummary = 23;
-    int32 IsAutoActivated = 24;
-    google.protobuf.Timestamp ActivationDate = 25;
-    string AssociationCode = 26;
-    int32 RedemptionLimitQuantity = 27;
-    int32 MinBasketValue = 28; // its decimal type
-    int32 MinTripCount = 29;
-    int32 RewaredOfferValue = 30; // its decimal type
-    string RewaredCategoryName = 31;
-    int32 RewardQuantity = 32;
-    int32 IsClipped = 33;//can be bool type
-    string Visible = 34;//can be bool type
-    bool isProductEligible = 35; //UpcCount > 0;
-    string OfferToken = 36;
-    // Offer DGDiscount = 37; // Not needed for this API
-    google.protobuf.StringValue expiryLabel =37;
-    bool IsCasback = 38;//OfferSourceType == OfferSourceType.Cashback
-    bool IsBasketLevel = 39;
-}
-
-message CouponCategory {
-    string Name = 1;
-    int32 Count = 2;
-}
-
-
-message CouponBrand {
-    string Name = 1;
-    int32 Count = 2;
-}
-
-
-message CouponPagination {
-    int32 StartRecord = 1;
-    int32 ExpectedRecordsPerPage = 2;
-    int32 TotalRecords = 3;
-    int32 TotalRecordsPerPage = 4;
-    //int32 TotalActivatedCoupons = 5; //Need to check
 }

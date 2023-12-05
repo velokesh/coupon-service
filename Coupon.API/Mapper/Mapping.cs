@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Coupon.API.Protos;
 using Google.Protobuf.WellKnownTypes;
+using Coupon.API;
 
 namespace Coupon_Service.Mapper
 {
@@ -8,10 +9,11 @@ namespace Coupon_Service.Mapper
     {
         public Mapping()
         {
-            CreateMap<RecommendedCouponSearchRequest, Coupon.Domain.Models.RecommendedCouponDTO>().ReverseMap().
+            //sort
+            CreateMap<RecommendedCouponSearchRequest, Coupon.Domain.Models.RecommendedCoupon>().ReverseMap().
                 ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
-            CreateMap<Coupon.Domain.Models.FilteredCoupon, FilteredCoupon>().ReverseMap().                
+            CreateMap<Coupon.Domain.Models.FilteredCoupon, RecommendedCouponResponse>().ReverseMap().                
                 ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
             CreateMap<Coupon.Domain.Models.CouponPagination, CouponPagination>().ReverseMap().
@@ -28,6 +30,13 @@ namespace Coupon_Service.Mapper
                 .ForMember(dest => dest.OfferActivationDate, opts => opts.MapFrom(src => Timestamp.FromDateTime(DateTime.SpecifyKind(src.OfferActivationDate, DateTimeKind.Utc))))
                 .ForMember(dest => dest.OfferExpirationDate, opts => opts.MapFrom(src => Timestamp.FromDateTime(DateTime.SpecifyKind(src.OfferExpirationDate, DateTimeKind.Utc))))
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            //search
+            CreateMap<CouponFilterRequest, Coupon.Domain.Models.CouponSearch>().ReverseMap().
+                ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            CreateMap<Coupon.Domain.Models.FilteredCoupon, CouponSearchResponse>().ReverseMap().                
+                ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
         }
     }
 

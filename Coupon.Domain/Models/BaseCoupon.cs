@@ -10,7 +10,7 @@ namespace Coupon.Domain.Models
 
         public OfferSourceType OfferSourceType { get; set; } 
 
-        public List<long> UPCs { get; set; } = [];
+        public List<long> UPCs { get; set; } = new List<long>();
         public string TargetType { get; set; }
 
         public string OfferCode { get; set; }

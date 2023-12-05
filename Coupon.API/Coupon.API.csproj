@@ -27,6 +27,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Protobuf Include="Protos\common\enums.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\coupon.proto" GrpcServices="Server" />
     <Protobuf Include="Protos\couponsearch.proto" GrpcServices="Server" />
     <Protobuf Include="Protos\couponsort.proto" GrpcServices="Server" />
     <Protobuf Include="Protos\google\api\annotations.proto" ProtoCompile="false" GrpcServices="None" />

@@ -1,25 +1,28 @@
-﻿#region References
-using AutoMapper;
+﻿using AutoMapper;
 using Coupon.Application.Interfaces;
 using Coupon.Domain.Models;
 using Coupon.Infrastructure.Interfaces;
 using Coupon.Infrastructure.Repositories.Database.Entities;
 using Microsoft.Extensions.Logging;
-#endregion
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Coupon.Application.Queries
 {
-    public class GetRecommendedCouponsQueryHandler : IQueryHandler<RecommendedCoupon, FilteredCoupon>
+    public class SearchCouponsQueryHandler : IQueryHandler<CouponSearch, FilteredCoupon>
     {
         #region References
-        private readonly ILogger<GetRecommendedCouponsQueryHandler> _logger;
+        private readonly ILogger<SearchCouponsQueryHandler> _logger;
         private readonly IMapper _mapper;
         private readonly ICouponRepository _couponOperation;
         #endregion
 
         #region Public Members
-        public GetRecommendedCouponsQueryHandler(
-            ILogger<GetRecommendedCouponsQueryHandler> logger,
+        public SearchCouponsQueryHandler(
+            ILogger<SearchCouponsQueryHandler> logger,
             IMapper mapper,
             ICouponRepository couponOperation)
         {
@@ -29,25 +32,26 @@ namespace Coupon.Application.Queries
         }
 
         /// <summary>
-        /// Gets Recommended Coupons
+        /// Gets filtered Coupons data based on search 
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
         public FilteredCoupon ExecuteQuery(
-            RecommendedCoupon request)
+            CouponSearch request)
         {
-            _logger.LogInformation("GetRecommendedCouponsQueryHandler triggered to retrieve recommended coupons");
+            _logger.LogInformation("SearchCouponsQueryHandler triggered to retrieve recommended coupons");
 
-            var coupons = _couponOperation.GetCoupons();
+           // var coupons = _couponOperation.SearchCoupons();
 
             return new FilteredCoupon()
             {
-                Coupons = _mapper.Map<List<CouponInfo>, List<BaseCoupon>>(coupons.ToList()),
+               // Coupons = _mapper.Map<List<CouponInfo>, List<BaseCoupon>>(coupons.ToList()),
                 Brands = new List<CouponBrand>(),
                 Category = new List<CouponCategory>(),
-                PaginationInfo = new CouponPagination() {
+                PaginationInfo = new CouponPagination()
+                {
                     StartRecord = 10,
-                    TotalRecords = coupons.Count(),
+                    TotalRecords = 10,//coupons.Count(),
                     ExpectedRecordsPerPage = 10,
                     TotalRecordsPerPage = 5
                 }

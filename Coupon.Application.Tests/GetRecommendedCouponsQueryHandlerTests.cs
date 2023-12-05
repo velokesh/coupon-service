@@ -21,7 +21,7 @@ namespace Coupon.Api.Tests
             GetRecommendedCouponsQueryHandler getRecommendedCouponsQueryHandler)
         {
             var request = fixture
-                .Build<RecommendedCouponDTO>()
+                .Build<RecommendedCoupon>()
                 .Create();
 
             var couponsResponse = fixture.Build<CouponInfo>()

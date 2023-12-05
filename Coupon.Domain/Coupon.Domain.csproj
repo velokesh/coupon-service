@@ -8,8 +8,9 @@
 
   <ItemGroup>
     <Compile Remove="Models\ContextAttributes.cs" />
+    <Compile Remove="Models\CouponFilter.cs" />
+    <Compile Remove="Models\CouponFilterRequest.cs" />
     <Compile Remove="Models\CouponsCashbackSearch.cs" />
-    <Compile Remove="Models\CouponSearch.cs" />
     <Compile Remove="Models\GlobalProductCouponsFilter.cs" />
     <Compile Remove="Models\IQuotientSearchable.cs" />
     <Compile Remove="Models\Offer.cs" />

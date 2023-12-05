@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Coupon.Domain.Models
 {
-    public class RecommendedCouponDTO
+    public class RecommendedCoupon
     {
 
         private string _category;
@@ -65,13 +65,13 @@ namespace Coupon.Domain.Models
         /// <summary>
         /// Sort order
         /// </summary>
-        [JsonProperty(PropertyName = "SortOrder")]
+        //[JsonProperty(PropertyName = "SortOrder")]
         public SortOrderType SortOrder { get; set; }
 
         /// <summary>
         /// FilterType -- ToDo
         /// </summary>
-        [JsonProperty(PropertyName = "FilterType")]
+        //[JsonProperty(PropertyName = "FilterType")]
         public CouponApplicationMode ApplicationMode { get; set; }
 
         /// <summary>

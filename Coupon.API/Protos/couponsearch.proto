@@ -1,16 +1,47 @@
 syntax = "proto3";
 
-option csharp_namespace = "Coupon.API.Protos";
-
+import "Protos/common/enums.proto";
+import "Protos/coupon.proto";
+import "Protos/google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
 
 package Coupon.API;
-
+ 
+option csharp_namespace = "Coupon.API.Protos";
+ 
+ 
 service CouponSearchService {
-	rpc SearchCoupons(CouponFilterRequest) returns (FilteredCoupons);
+	rpc SearchCoupons(CouponFilterRequest) returns (CouponSearchResponse){
+	option (google.api.http) = {
+            post: "/search/provider"
+            body: "*"
+        };
+    }
 }
-
+ 
 message CouponFilterRequest {
+	string CategoryName = 1;
+	string CouponDescription = 2;
+	int32 StoreNumber = 4;
+	repeated string OfferIdList = 5;
+	repeated  string Categories = 6;
+    repeated string Brands = 7;
+	repeated string UpcList = 8;
+	string SearchText = 9;
+	CouponApplicationMode FilterType = 10;
+    OfferSourceType OfferSourceType = 11;
+    optional MixMode MixMode = 12;
+    bool displayAllCategoriesAndBrands = 13;
+    SortOrderType SortOrder = 14;
+    optional SortByType SortBy = 15;
+    int32 PageIndex = 16;
+    int32 NumPageRecords = 17;
 }
-
-message FilteredCoupons {
+ 
+message CouponSearchResponse{
+    repeated BaseCoupon Coupons = 1;
+    repeated CouponCategory Category = 2;
+    repeated CouponBrand Brands = 3;
+    CouponPagination PaginationInfo = 4;
 }

@@ -1,0 +1,73 @@
+syntax = "proto3";
+
+import "Protos/common/enums.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
+package Coupon.API;
+
+option csharp_namespace = "Coupon.API.Protos";
+
+ 
+message BaseCoupon {
+    int32 DiscountIndicator = 1;
+    CouponSource CouponType = 2;
+    OfferSourceType OfferSourceType = 3;
+    repeated int64 UPCs = 4;
+    string TargetType = 5;
+    string OfferCode = 6;
+    string OfferId = 7;
+    string Image1 = 8;
+    string Image2 = 9;
+    string OfferType = 10;
+    int32 IsManufacturerCoupon = 11;
+    string RecemptionFrequency = 12;
+    google.protobuf.Timestamp OfferActivationDate = 13;
+    google.protobuf.Timestamp OfferExpirationDate = 14;
+    string OfferDescription = 15;
+    string OfferDisclaimer = 16;
+    string OfferFeaturedText = 17;
+    string BrandName = 18;
+    string Companyname = 19;
+    int32 TimesShopQuantity = 20;
+    int32 MinQuantity = 21;
+    string MinQuantityDescription = 22;
+    string OfferSummary = 23;
+    int32 IsAutoActivated = 24;
+    google.protobuf.Timestamp ActivationDate = 25;
+    string AssociationCode = 26;
+    int32 RedemptionLimitQuantity = 27;
+    int32 MinBasketValue = 28; // its decimal type
+    int32 MinTripCount = 29;
+    int32 RewaredOfferValue = 30; // its decimal type
+    string RewaredCategoryName = 31;
+    int32 RewardQuantity = 32;
+    int32 IsClipped = 33;//can be bool type
+    string Visible = 34;//can be bool type
+    bool isProductEligible = 35; //UpcCount > 0;
+    string OfferToken = 36;
+    string expiryLabel = 37;
+    bool IsCasback = 38;
+    bool IsBasketLevel = 39;
+}
+ 
+message CouponCategory {
+    string Name = 1;
+    int32 Count = 2;
+}
+ 
+ 
+message CouponBrand {
+    string Name = 1;
+    int32 Count = 2;
+}
+ 
+ 
+message CouponPagination {
+    int32 StartRecord = 1;
+    int32 ExpectedRecordsPerPage = 2;
+    int32 TotalRecords = 3;
+    int32 TotalRecordsPerPage = 4;
+    //int32 TotalActivatedCoupons = 5; //Need to check
+}
+

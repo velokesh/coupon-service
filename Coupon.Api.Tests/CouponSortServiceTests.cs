@@ -16,7 +16,7 @@ namespace Coupon.Api.Tests
         [Test, CustomAutoData()]
         public async Task GetRecommendedCoupons_ValidInput_ShouldReturnSuccessResponse(
             Fixture fixture,
-            [Frozen] IQueryHandler<RecommendedCouponDTO, Task<FilteredCoupon>> getRecommendedCouponsQueryHandler,
+            [Frozen] IQueryHandler<RecommendedCoupon, Task<FilteredCoupon>> getRecommendedCouponsQueryHandler,
             CouponSortService couponSortService)
         {
             var request = fixture
@@ -27,7 +27,7 @@ namespace Coupon.Api.Tests
                 .Create();
 
             Mock.Get(getRecommendedCouponsQueryHandler)
-                .Setup(x => x.ExecuteQuery(It.IsAny<RecommendedCouponDTO>()))
+                .Setup(x => x.ExecuteQuery(It.IsAny<RecommendedCoupon>()))
                 .ReturnsAsync(result);
 
             var response = await couponSortService

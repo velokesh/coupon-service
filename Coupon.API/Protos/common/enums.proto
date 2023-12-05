@@ -1,0 +1,73 @@
+syntax = "proto3";
+ 
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
+package Coupon.API;
+
+option csharp_namespace = "Coupon.API.Protos";
+
+enum SortByType{
+    //for recommended & targeted coupons/offers
+        Recommended = 0;
+ 
+        OfferType = 1;
+ 
+        OfferValue = 2;
+ 
+        BrandName = 3;
+ 
+        ExpiryDate = 4;
+ 
+        ActiveDate = 5;
+ 
+        //for clipped coupons/offers
+        //grouped by category and sorted by name
+        GroupByCategory = 6;
+ 
+        SortByName = 7;
+ 
+        SortByExpiryDate = 8;   //same as 4
+ 
+        RecentSortAdded = 9;
+        ClipDate = 10;
+}
+ 
+enum SortOrderType{
+    None = 0;
+   
+    Ascending = 1;
+   
+    Descending = 2;
+}
+ 
+enum CouponApplicationMode{
+    
+    Old = 0;
+ 
+   
+    New = 1;
+}
+ 
+enum OfferSourceType{
+  
+    Default = 0;
+ 
+   
+    Coupon = 1;
+ 
+    Cashback = 2;
+}
+ 
+enum MixMode{
+    Mix1 = 0; // Coupons,CashBack,Coupons,CashBack
+    Mix2 = 1;// Coupons,CashBack,CashBack,Coupons,Coupons,CashBack
+    CouponsFrist = 2;
+    CashbackFirst = 3;
+}
+ 
+enum CouponSource{
+    Empty = 0;
+    Other = 1;
+    JFY = 2;
+}

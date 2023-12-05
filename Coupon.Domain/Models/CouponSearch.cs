@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 
 namespace Coupon.Domain.Models
 {
-    public class CouponSearch : IQuotientSearchable
+
+    public class CouponSearch 
     {
         /// <summary>
         /// Gets the number of page records
@@ -29,12 +30,6 @@ namespace Coupon.Domain.Models
         /// </summary>
         public SortOrderType SortOrderType { get; set; }
 
-        /// <summary>
-        /// Gets a list of all coupon filters
-        /// </summary>
-        public IEnumerable<CouponFilter> Filters { get; set; }
-
-        public ContextAttributes ContextAttributes { get; set; }
 
         /// <summary>
         /// Specify if the we need to get coupons,cashback or both
@@ -52,37 +47,27 @@ namespace Coupon.Domain.Models
         public bool DisplayAllCategoriesAndBrands { get; set; } = false;
 
         /// <summary>
-        /// Constructor
+        /// Upcs list
         /// </summary>
-        /// <param name="numberOfPageRecords"></param>
-        /// <param name="pageIndex"></param>
-        /// <param name="sortByType"></param>
-        /// <param name="sortOrderType"></param>
-        public CouponSearch(int numberOfPageRecords, int pageIndex, SortByType? sortByType, SortOrderType sortOrderType)
-        {
-            NumberOfPageRecords = numberOfPageRecords;
-            PageIndex = pageIndex;
-            SortByType = sortByType;
-            SortOrderType = sortOrderType;
-        }
+        public List<string> UpcList { get; set; }
 
         /// <summary>
-        /// Constructor with filters
+        /// Categories list
         /// </summary>
-        /// <param name="numberOfPageRecords"></param>
-        /// <param name="pageIndex"></param>
-        /// <param name="sortByType"></param>
-        /// <param name="sortOrderType"></param>
-        /// <param name="filters"></param>
-        //public CouponSearch(int numberOfPageRecords, int pageIndex, SortByType sortByType, SortOrderType sortOrderType, IEnumerable<CouponFilter> filters, ContextAttributes context = null)
-        //{
-        //    NumberOfPageRecords = numberOfPageRecords;
-        //    PageIndex = pageIndex;
-        //    SortByType = sortByType;
-        //    SortOrderType = sortOrderType;
-        //    Filters = filters;
-        //    ContextAttributes = context;
+        public List<string> Categories { get; set; }
 
-        //}
+        /// <summary>
+        /// Brands list
+        /// </summary>
+        public List<string> Brands { get; set; }
+        /// <summary>
+        /// Description
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
+        /// Store number
+        /// </summary>
+        public int StoreNumber { get; set; } = -1;
     }
 }
