@@ -26,7 +26,7 @@ namespace Coupon.Infrastructure
             {
                 entity.HasKey(e => e.OfferId).HasName("coupon_pkey");
 
-                entity.ToTable("coupon", "dollargeneral");
+                entity.ToTable("coupon");
 
                 entity.Property(e => e.OfferId)
                     .HasMaxLength(40)
@@ -161,7 +161,7 @@ namespace Coupon.Infrastructure
             {
                 entity
                     .HasNoKey()
-                    .ToTable("coupon_upc_xr_t", "dollargeneral");
+                    .ToTable("coupon_upc_xr_t");
 
                 entity.Property(e => e.OfferId)
                     .HasMaxLength(40)
@@ -183,7 +183,7 @@ namespace Coupon.Infrastructure
             {
                 entity.HasKey(e => e.Upc).HasName("item_mst_t_pkey");
 
-                entity.ToTable("item_mst_t", "dollargeneral");
+                entity.ToTable("item_mst_t");
 
                 entity.Property(e => e.Upc)
                     .ValueGeneratedNever()
