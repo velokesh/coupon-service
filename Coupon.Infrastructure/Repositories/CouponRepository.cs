@@ -1,4 +1,5 @@
-﻿using Coupon.Infrastructure.Interfaces;
+﻿using Coupon.Domain.Models;
+using Coupon.Infrastructure.Interfaces;
 using Coupon.Infrastructure.Repositories.Database.Entities;
 
 namespace Coupon.Infrastructure.Repositories
@@ -13,6 +14,11 @@ namespace Coupon.Infrastructure.Repositories
         }
 
         public IEnumerable<CouponInfo> GetCoupons()
+        {
+            return _dbContext.Coupons.AsEnumerable();
+        }
+
+        public IEnumerable<CouponInfo> GetCoupons(CouponSearch filters)
         {
             return _dbContext.Coupons.AsEnumerable();
         }

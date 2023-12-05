@@ -22,4 +22,8 @@
     <PackageReference Include="System.Linq" Version="4.3.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Coupon.Domain\Coupon.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

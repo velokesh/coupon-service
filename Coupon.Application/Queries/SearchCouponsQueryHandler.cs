@@ -41,17 +41,32 @@ namespace Coupon.Application.Queries
         {
             _logger.LogInformation("SearchCouponsQueryHandler triggered to retrieve recommended coupons");
 
-           // var coupons = _couponOperation.SearchCoupons();
+            var coupons = _couponOperation.GetCoupons(request).ToList();
+            var brands = coupons.Where(x => x.BrandName != null)
+                .GroupBy(x => x.BrandName).Select(g => new CouponBrand
+                {
+                    Name = g.Key,
+                    Count = g.Count()
+                }).ToList();
+            var categories = coupons
+                .Where(x => x.RewardCatagoryName != null)
+                .GroupBy(x => x.RewardCatagoryName).Select(g =>
+                new CouponCategory
+                {
+                    Name = g.Key,
+                    Count = g.Count()
+                }).ToList();
+
 
             return new FilteredCoupon()
             {
-               // Coupons = _mapper.Map<List<CouponInfo>, List<BaseCoupon>>(coupons.ToList()),
-                Brands = new List<CouponBrand>(),
-                Category = new List<CouponCategory>(),
+                Coupons = _mapper.Map<List<CouponInfo>, List<BaseCoupon>>(coupons),
+                Brands = brands,
+                Category = categories,
                 PaginationInfo = new CouponPagination()
                 {
                     StartRecord = 10,
-                    TotalRecords = 10,//coupons.Count(),
+                    TotalRecords = coupons.Count(),
                     ExpectedRecordsPerPage = 10,
                     TotalRecordsPerPage = 5
                 }

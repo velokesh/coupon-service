@@ -28,18 +28,18 @@ namespace Coupon.Domain.Models
         /// <summary>
         /// Gets the sort order type
         /// </summary>
-        public SortOrderType SortOrderType { get; set; }
+        public SortOrderType SortOrderType { get; set; } = SortOrderType.Ascending;
 
 
         /// <summary>
         /// Specify if the we need to get coupons,cashback or both
         /// </summary>
-        public OfferSourceType OfferSourceType { get; set; }
+        public OfferSourceType OfferSourceType { get; set; } = OfferSourceType.Coupon;
 
         /// <summary>
         /// Used to specify the mixmode between coupons and cashback (couponsfirst,cashbackfirst,comingled, see MixMiode enum for details)
         /// </summary>
-        public MixMode MixMode { get; set; }
+        public MixMode MixMode { get; set; } = MixMode.Mix1;
 
         /// <summary>
         /// Always return all categories and brands regardless of filter or search parameters.
