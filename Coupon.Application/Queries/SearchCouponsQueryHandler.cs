@@ -41,7 +41,8 @@ namespace Coupon.Application.Queries
         {
             _logger.LogInformation("SearchCouponsQueryHandler triggered to retrieve recommended coupons");
 
-            var coupons = _couponOperation.GetCoupons(request).ToList();
+            var filteredCoupons = _couponOperation.GetCoupons(request).ToList();
+            var coupons = _couponOperation.GetCoupons(new CouponSearch()).ToList();
             var brands = coupons.Where(x => x.BrandName != null)
                 .GroupBy(x => x.BrandName).Select(g => new CouponBrand
                 {
@@ -60,13 +61,13 @@ namespace Coupon.Application.Queries
 
             return new FilteredCoupon()
             {
-                Coupons = _mapper.Map<List<CouponInfo>, List<BaseCoupon>>(coupons),
+                Coupons = _mapper.Map<List<CouponInfo>, List<BaseCoupon>>(filteredCoupons),
                 Brands = brands,
                 Category = categories,
                 PaginationInfo = new CouponPagination()
                 {
                     StartRecord = 10,
-                    TotalRecords = coupons.Count(),
+                    TotalRecords = filteredCoupons.Count(),
                     ExpectedRecordsPerPage = 10,
                     TotalRecordsPerPage = 5
                 }
