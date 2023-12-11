@@ -32,8 +32,10 @@ namespace Coupon_Service.Mapper
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
             //search
-            CreateMap<CouponFilterRequest, Coupon.Domain.Models.CouponSearch>().ReverseMap().
-                ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+            CreateMap<CouponFilterRequest, Coupon.Domain.Models.CouponSearch>()
+                .ForMember(dest => dest.Description, opts => opts.MapFrom(src => src.CouponDescription))
+                .ReverseMap()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
             CreateMap<Coupon.Domain.Models.FilteredCoupon, CouponSearchResponse>().ReverseMap().                
                 ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
