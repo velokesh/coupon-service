@@ -1,4 +1,4 @@
-﻿using Coupon.Infrastructure.Repositories.Database.Entities;
+﻿using Coupon.Infrastructure.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Coupon.Infrastructure
@@ -18,10 +18,13 @@ namespace Coupon.Infrastructure
 
         public virtual DbSet<CouponUpc> CouponUpcXrTs { get; set; }
 
-        public virtual DbSet<Item> ItemMstTs { get; set; }
+        //public virtual DbSet<Item> ItemMstTs { get; set; }
+
+        public virtual DbSet<UserCoupon> UserCoupons { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.HasDefaultSchema("DG");
             modelBuilder.Entity<CouponInfo>(entity =>
             {
                 entity.HasKey(e => e.OfferId).HasName("coupon_pkey");
@@ -30,7 +33,7 @@ namespace Coupon.Infrastructure
 
                 entity.Property(e => e.OfferId)
                     .HasMaxLength(40)
-                    .HasColumnName("offer_id");
+                    .HasColumnName("offr_id");
                 entity.Property(e => e.ActivationDt)
                     .HasColumnType("timestamp without time zone")
                     .HasColumnName("activation_dt");
@@ -67,58 +70,58 @@ namespace Coupon.Infrastructure
                 entity.Property(e => e.MinTripCount).HasColumnName("min_trip_count");
                 entity.Property(e => e.OfferActDt)
                     .HasColumnType("timestamp without time zone")
-                    .HasColumnName("offer_act_dt");
+                    .HasColumnName("offr_act_dt");
                 entity.Property(e => e.OfferAssnCd)
                     .HasMaxLength(40)
-                    .HasColumnName("offer_assn_cd");
+                    .HasColumnName("offr_assn_cd");
                 entity.Property(e => e.OfferCd)
                     .HasMaxLength(50)
-                    .HasColumnName("offer_cd");
+                    .HasColumnName("offr_cd");
                 entity.Property(e => e.OfferDesc)
                     .HasMaxLength(2000)
-                    .HasColumnName("offer_desc");
+                    .HasColumnName("offr_descr");
                 entity.Property(e => e.OfferDisclaimer)
                     .HasMaxLength(2000)
-                    .HasColumnName("offer_disclaimer");
+                    .HasColumnName("offr_disclaimer");
                 entity.Property(e => e.OfferExpiryDt)
                     .HasColumnType("timestamp without time zone")
-                    .HasColumnName("offer_expiry_dt");
+                    .HasColumnName("offr_expiry_dt");
                 entity.Property(e => e.OfferFeaturedTxt)
                     .HasMaxLength(2000)
-                    .HasColumnName("offer_featured_txt");
+                    .HasColumnName("offr_featured_txt");
                 entity.Property(e => e.OfferFinePrt)
                     .HasMaxLength(500)
-                    .HasColumnName("offer_fine_prt");
+                    .HasColumnName("offr_fine_prt");
                 entity.Property(e => e.OfferGs1)
                     .HasMaxLength(100)
-                    .HasColumnName("offer_gs1");
+                    .HasColumnName("offr_gs1");
                 entity.Property(e => e.OfferImg1)
                     .HasMaxLength(500)
-                    .HasColumnName("offer_img_1");
+                    .HasColumnName("offr_img_1");
                 entity.Property(e => e.OfferImg2)
                     .HasMaxLength(500)
-                    .HasColumnName("offer_img_2");
+                    .HasColumnName("offr_img_2");
                 entity.Property(e => e.OfferShutoffDt)
                     .HasColumnType("timestamp without time zone")
-                    .HasColumnName("offer_shutoff_dt");
+                    .HasColumnName("offr_shutoff_dt");
                 entity.Property(e => e.OfferSrc)
                     .HasMaxLength(40)
-                    .HasColumnName("offer_src");
+                    .HasColumnName("offr_src");
                 entity.Property(e => e.OfferSum)
                     .HasMaxLength(250)
-                    .HasColumnName("offer_sum");
+                    .HasColumnName("offr_sum");
                 entity.Property(e => e.OfferType)
                     .HasMaxLength(40)
-                    .HasColumnName("offer_type");
+                    .HasColumnName("offr_typ");
                 entity.Property(e => e.OfferUpc)
                     .HasMaxLength(20)
-                    .HasColumnName("offer_upc");
+                    .HasColumnName("offr_upc");
                 entity.Property(e => e.ProdtOffrActDt)
                     .HasColumnType("timestamp without time zone")
-                    .HasColumnName("prodt_offr_act_dt");
+                    .HasColumnName("pdt_offr_act_dt");
                 entity.Property(e => e.ProdtOffrExpiryDt)
                     .HasColumnType("timestamp without time zone")
-                    .HasColumnName("prodt_offr_expiry_dt");
+                    .HasColumnName("pdt_offr_expiry_dt");
                 entity.Property(e => e.RedemptionDt)
                     .HasColumnType("timestamp without time zone")
                     .HasColumnName("redemption_dt");
@@ -141,16 +144,16 @@ namespace Coupon.Infrastructure
                     .HasColumnName("source_exp_dt");
                 entity.Property(e => e.SourceProdtActDt)
                     .HasMaxLength(100)
-                    .HasColumnName("source_prodt_act_dt");
+                    .HasColumnName("source_pdt_act_dt");
                 entity.Property(e => e.SourceProdtExpDt)
                     .HasMaxLength(100)
-                    .HasColumnName("source_prodt_exp_dt");
+                    .HasColumnName("source_pdt_exp_dt");
                 entity.Property(e => e.SourceShutoffDt)
                     .HasMaxLength(100)
                     .HasColumnName("source_shutoff_dt");
                 entity.Property(e => e.TgtType)
                     .HasMaxLength(50)
-                    .HasColumnName("tgt_type");
+                    .HasColumnName("tgt_typ");
                 entity.Property(e => e.TimesShopQty).HasColumnName("times_shop_qty");
                 entity.Property(e => e.Visible)
                     .HasMaxLength(10)
@@ -161,43 +164,45 @@ namespace Coupon.Infrastructure
             {
                 entity
                     .HasNoKey()
-                    .ToTable("coupon_upc_xr_t");
+                    .ToTable("coupon_upc");
 
                 entity.Property(e => e.OfferId)
                     .HasMaxLength(40)
-                    .HasColumnName("offer_id");
-                entity.Property(e => e.Upc).HasColumnName("upc");
+                    .HasColumnName("OFFR_ID");
+                entity.Property(e => e.Upc).HasMaxLength(20).HasColumnName("UPC_12");
 
-                entity.HasOne(d => d.Offer).WithMany()
-                    .HasForeignKey(d => d.OfferId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("coupon_upc_xr_t_offer_id_fkey");
+                //entity.HasOne(d => d.Offer).WithMany()
+                //    .HasForeignKey(d => d.OfferId)
+                //    .OnDelete(DeleteBehavior.ClientSetNull)
+                //    .HasConstraintName("coupon_upc_xr_t_offer_id_fkey");
 
-                entity.HasOne(d => d.UpcNavigation).WithMany()
-                    .HasForeignKey(d => d.Upc)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("coupon_upc_xr_t_upc_fkey");
+                //entity.HasOne(d => d.UpcNavigation).WithMany()
+                //    .HasForeignKey(d => d.Upc)
+                //    .OnDelete(DeleteBehavior.ClientSetNull)
+                //    .HasConstraintName("coupon_upc_xr_t_upc_fkey");
             });
 
-            modelBuilder.Entity<Item>(entity =>
-            {
-                entity.HasKey(e => e.Upc).HasName("item_mst_t_pkey");
+            //modelBuilder.Entity<Item>(entity =>
+            //{
+            //    entity.HasKey(e => e.Upc).HasName("item_mst_t_pkey");
 
-                entity.ToTable("item_mst_t");
+            //    entity.ToTable("item_mst_t");
 
-                entity.Property(e => e.Upc)
-                    .ValueGeneratedNever()
-                    .HasColumnName("upc");
-                entity.Property(e => e.ExtName)
-                    .HasMaxLength(250)
-                    .HasColumnName("ext_name");
-                entity.Property(e => e.ItemLongDescription)
-                    .HasMaxLength(4000)
-                    .HasColumnName("item_long_description");
-                entity.Property(e => e.MainDesc)
-                    .HasMaxLength(50)
-                    .HasColumnName("main_desc");
-            });
+            //    entity.Property(e => e.Upc)
+            //        .ValueGeneratedNever()
+            //        .HasColumnName("upc");
+            //    entity.Property(e => e.ExtName)
+            //        .HasMaxLength(250)
+            //        .HasColumnName("ext_name");
+            //    entity.Property(e => e.ItemLongDescription)
+            //        .HasMaxLength(4000)
+            //        .HasColumnName("item_long_description");
+            //    entity.Property(e => e.MainDesc)
+            //        .HasMaxLength(50)
+            //        .HasColumnName("main_desc");
+            //});
+
+            modelBuilder.Entity<UserCoupon>().ToTable("user_coupon");
 
             OnModelCreatingPartial(modelBuilder);
         }

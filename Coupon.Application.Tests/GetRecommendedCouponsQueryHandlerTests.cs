@@ -5,7 +5,7 @@ using Coupon.Application.Queries;
 using Coupon.Application.Tests;
 using Coupon.Domain.Models;
 using Coupon.Infrastructure.Interfaces;
-using Coupon.Infrastructure.Repositories.Database.Entities;
+using Coupon.Infrastructure.Entities;
 using Moq;
 #endregion
 

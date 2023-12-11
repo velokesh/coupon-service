@@ -21,22 +21,22 @@ service CouponSearchService {
 }
  
 message CouponFilterRequest {
-	string CategoryName = 1;
-	string CouponDescription = 2;
-	int32 StoreNumber = 4;
+	optional string CategoryName = 1;
+	optional string CouponDescription = 2;
+	optional int32 StoreNumber = 4;
 	repeated string OfferIdList = 5;
 	repeated  string Categories = 6;
     repeated string Brands = 7;
 	repeated string UpcList = 8;
-	string SearchText = 9;
-	CouponApplicationMode FilterType = 10;
-    OfferSourceType OfferSourceType = 11;
+	optional string SearchText = 9;
+	optional CouponApplicationMode FilterType = 10;
+    optional OfferSourceType OfferSourceType = 11;
     optional MixMode MixMode = 12;
-    bool displayAllCategoriesAndBrands = 13;
-    SortOrderType SortOrder = 14;
+    optional bool displayAllCategoriesAndBrands = 13;
+    optional SortOrderType SortOrder = 14;
     optional SortByType SortBy = 15;
-    int32 PageIndex = 16;
-    int32 NumPageRecords = 17;
+    optional int32 PageIndex = 16;
+    optional int32 NumPageRecords = 17;
 }
  
 message CouponSearchResponse{

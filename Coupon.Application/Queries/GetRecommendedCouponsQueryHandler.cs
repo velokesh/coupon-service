@@ -3,7 +3,7 @@ using AutoMapper;
 using Coupon.Application.Interfaces;
 using Coupon.Domain.Models;
 using Coupon.Infrastructure.Interfaces;
-using Coupon.Infrastructure.Repositories.Database.Entities;
+using Coupon.Infrastructure.Entities;
 using Microsoft.Extensions.Logging;
 #endregion
 
@@ -38,7 +38,7 @@ namespace Coupon.Application.Queries
         {
             _logger.LogInformation("GetRecommendedCouponsQueryHandler triggered to retrieve recommended coupons");
 
-            var coupons = _couponOperation.GetCoupons();
+            var coupons = _couponOperation.GetCoupons(request);
 
             return new FilteredCoupon()
             {
@@ -46,10 +46,10 @@ namespace Coupon.Application.Queries
                 Brands = new List<CouponBrand>(),
                 Category = new List<CouponCategory>(),
                 PaginationInfo = new CouponPagination() {
-                    StartRecord = 10,
+                    StartRecord = request.PageIndex,
                     TotalRecords = coupons.Count(),
-                    ExpectedRecordsPerPage = 10,
-                    TotalRecordsPerPage = 5
+                    ExpectedRecordsPerPage = coupons.Count(),
+                    TotalRecordsPerPage = coupons.Count()
                 }
             };
         }

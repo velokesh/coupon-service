@@ -1,4 +1,6 @@
-﻿namespace Coupon.Infrastructure.Repositories.Database.Entities
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Coupon.Infrastructure.Entities
 {
     public class CouponInfo
     {
@@ -42,7 +44,9 @@
 
         public string? OfferSrc { get; set; }
 
-        public bool? IsAutoActivated { get; set; }
+        public int? IsAutoActivated { get; set; }
+
+        //public int? IsClipped { get; set; }
 
         public string? TgtType { get; set; }
 
@@ -93,5 +97,14 @@
         public string? SourceProdtActDt { get; set; }
 
         public string? SourceProdtExpDt { get; set; }
+
+        [NotMapped]
+        public int UpcCount { get; set; }
+
+        [NotMapped]
+        public string? OfferToken { get; set; }
+
+        [NotMapped]
+        public int SortNumber { get; set; }
     }
 }

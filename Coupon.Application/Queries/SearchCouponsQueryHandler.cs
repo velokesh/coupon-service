@@ -2,7 +2,7 @@
 using Coupon.Application.Interfaces;
 using Coupon.Domain.Models;
 using Coupon.Infrastructure.Interfaces;
-using Coupon.Infrastructure.Repositories.Database.Entities;
+using Coupon.Infrastructure.Entities;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -41,8 +41,8 @@ namespace Coupon.Application.Queries
         {
             _logger.LogInformation("SearchCouponsQueryHandler triggered to retrieve recommended coupons");
 
-            var filteredCoupons = _couponOperation.GetCoupons(request).ToList();
-            var coupons = _couponOperation.GetCoupons(new CouponSearch()).ToList();
+            
+            var coupons = _couponOperation.GetCoupons(request).ToList();
             var brands = coupons.Where(x => x.BrandName != null)
                 .GroupBy(x => x.BrandName).Select(g => new CouponBrand
                 {
@@ -61,15 +61,15 @@ namespace Coupon.Application.Queries
 
             return new FilteredCoupon()
             {
-                Coupons = _mapper.Map<List<CouponInfo>, List<BaseCoupon>>(filteredCoupons),
+                Coupons = _mapper.Map<List<CouponInfo>, List<BaseCoupon>>(coupons),
                 Brands = brands,
                 Category = categories,
                 PaginationInfo = new CouponPagination()
                 {
-                    StartRecord = 10,
-                    TotalRecords = filteredCoupons.Count(),
-                    ExpectedRecordsPerPage = 10,
-                    TotalRecordsPerPage = 5
+                    StartRecord = request.PageIndex,
+                    TotalRecords = coupons.Count(),
+                    ExpectedRecordsPerPage = coupons.Count(),
+                    TotalRecordsPerPage = coupons.Count()
                 }
             };
         }

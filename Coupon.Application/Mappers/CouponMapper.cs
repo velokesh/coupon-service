@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Coupon.Domain.Enums;
 using Coupon.Domain.Models;
-using Coupon.Infrastructure.Repositories.Database.Entities;
+using Coupon.Infrastructure.Entities;
 using System.Text.RegularExpressions;
 
 namespace Coupon.Application.Mappers

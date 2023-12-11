@@ -13,7 +13,7 @@ namespace Coupon.Domain.Models
         /// <summary>
         /// Gets the number of page records
         /// </summary>
-        public int NumberOfPageRecords { get; set; }
+        public int NumPageRecords { get; set; }
 
         /// <summary>
         /// Gets the page index
