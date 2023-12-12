@@ -181,7 +181,9 @@ namespace Coupon.Infrastructure.Repositories
                 return nameof(CouponInfo.SortNumber);
             }
             switch (sortByType)
-            {                
+            {
+                case SortByType.OfferValue:
+                    return nameof(CouponInfo.RewardOfferVal);
                 case SortByType.ExpiryDate:
                     return nameof(CouponInfo.OfferExpiryDt);
                 case SortByType.BrandName:
