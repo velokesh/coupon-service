@@ -2,6 +2,8 @@
 using Coupon.Infrastructure.Interfaces;
 using Coupon.Infrastructure.Entities;
 using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
+using Coupon.Domain.Enums;
 
 namespace Coupon.Infrastructure.Repositories
 {
@@ -29,49 +31,49 @@ namespace Coupon.Infrastructure.Repositories
                     w => w.OfferId,
                     c => c.OfferId,
                     (w, c) => new CouponInfo
-                    { 
+                    {
                         OfferId = c.OfferId,
                         OfferSrc = c.OfferSrc,
                         ActivationDt = c.ActivationDt,
-                        OfferAssnCd=c.OfferAssnCd,
-                        BrandName=c.BrandName,
-                        CompanyName=c.CompanyName,
-                        OfferImg1=c.OfferImg1,
+                        OfferAssnCd = c.OfferAssnCd,
+                        BrandName = c.BrandName,
+                        CompanyName = c.CompanyName,
+                        OfferImg1 = c.OfferImg1,
                         OfferImg2 = c.OfferImg2,
-                        IsAutoActivated =c.IsAutoActivated,
-                        MinBasketValue =c.MinBasketValue,
-                        MinQty=c.MinQty,
-                        MinQtyDesc=c.MinQtyDesc,
-                        MinTripCount=c.MinTripCount,    
-                        ProdtOffrActDt=c.ProdtOffrActDt,
-                        OfferCd=c.OfferCd,  
-                        OfferDesc=c.OfferDesc,  
-                        OfferDisclaimer=c.OfferDisclaimer,  
-                        ProdtOffrExpiryDt=c.ProdtOffrExpiryDt,
-                        OfferFeaturedTxt    =c.OfferFeaturedTxt,    
-                        OfferFinePrt=c.OfferFinePrt,    
-                        OfferGs1=c.OfferGs1,
-                        OfferSum=c.OfferSum,    
-                        OfferType=c.OfferType,
-                        RedemptionFreq=c.RedemptionFreq,    
-                        RedemptionLimitQty=c.RedemptionLimitQty,
-                        RewardCatagoryName=c.RewardCatagoryName,    
-                        RewardOfferVal=c.RewardOfferVal,
-                        TgtType=c.TgtType,  
-                        TimesShopQty=c.TimesShopQty,
-                        Visible=c.Visible,
-                        OfferToken=c.OfferToken,
+                        IsAutoActivated = c.IsAutoActivated,
+                        MinBasketValue = c.MinBasketValue,
+                        MinQty = c.MinQty,
+                        MinQtyDesc = c.MinQtyDesc,
+                        MinTripCount = c.MinTripCount,
+                        ProdtOffrActDt = c.ProdtOffrActDt,
+                        OfferCd = c.OfferCd,
+                        OfferDesc = c.OfferDesc,
+                        OfferDisclaimer = c.OfferDisclaimer,
+                        ProdtOffrExpiryDt = c.ProdtOffrExpiryDt,
+                        OfferFeaturedTxt = c.OfferFeaturedTxt,
+                        OfferFinePrt = c.OfferFinePrt,
+                        OfferGs1 = c.OfferGs1,
+                        OfferSum = c.OfferSum,
+                        OfferType = c.OfferType,
+                        RedemptionFreq = c.RedemptionFreq,
+                        RedemptionLimitQty = c.RedemptionLimitQty,
+                        RewardCatagoryName = c.RewardCatagoryName,
+                        RewardOfferVal = c.RewardOfferVal,
+                        TgtType = c.TgtType,
+                        TimesShopQty = c.TimesShopQty,
+                        Visible = c.Visible,
+                        OfferToken = c.OfferToken,
                         SortNumber = w.SortNumber
                     })
-                .Where(w=>w.ProdtOffrExpiryDt > DateTime.Now)
-                .OrderBy(w=>w.SortNumber)
+                .Where(w => w.ProdtOffrExpiryDt > DateTime.Now)
+                .OrderBy(w => w.SortNumber)
                 .Take(filters.NumPageRecords)
                 .ToList();
 
             // Step 2: Update CouponInfo instances with LinkedUpcsCount
-           
+
             var couponIds = coupons.Select(c => c.OfferId).ToList();
-            
+
             var upcCounts = _dbContext.CouponUpcXrTs
                 .Where(cu => couponIds.Contains(cu.OfferId))
                 .GroupBy(cu => cu.OfferId)
@@ -79,7 +81,7 @@ namespace Coupon.Infrastructure.Repositories
 
             foreach (var coupon in coupons)
             {
-                coupon.UpcCount = upcCounts.Where(c => c.OfferId == coupon.OfferId).Select(x => x.UpcCount).FirstOrDefault();                       
+                coupon.UpcCount = upcCounts.Where(c => c.OfferId == coupon.OfferId).Select(x => x.UpcCount).FirstOrDefault();
             }
 
             return coupons;
@@ -91,7 +93,7 @@ namespace Coupon.Infrastructure.Repositories
         //{
         //    //starting with 1==1 to create a base expression
         //    BinaryExpression filterExp = Expression.Equal(Expression.Constant(1), Expression.Constant(1));
-          
+
         //    return (Expression<Func<CouponInfo, bool>>)Expression.Lambda(filterExp);
         //}
 
@@ -138,15 +140,18 @@ namespace Coupon.Infrastructure.Repositories
                         Visible = c.Visible,
                         OfferToken = c.OfferToken,
                         SortNumber = w.SortNumber
-                    }).Where(exp)
-                .OrderBy(w => w.SortNumber)
+                    })
+                .Where(exp)
+                .IfThenElse(() => filters.SortOrderType == SortOrderType.Descending,
+                    e => e.OrderByDescending(w => EF.Property<object>(w, GetColumnName(filters.SortByType))),
+                    e => e.OrderBy(w => EF.Property<object>(w, GetColumnName(filters.SortByType))))
                 .Take(filters.NumPageRecords)
                 .ToList();
 
             // Step 2: Update CouponInfo instances with LinkedUpcsCount
 
             var couponIds = coupons.Select(c => c.OfferId).ToList();
-           
+
             var upcCounts = _dbContext.CouponUpcXrTs
                 .Where(cu => couponIds.Contains(cu.OfferId))
                 .GroupBy(cu => cu.OfferId)
@@ -164,13 +169,35 @@ namespace Coupon.Infrastructure.Repositories
             //    .AsEnumerable();
         }
 
+        /// <summary>
+        /// Returns column name of Coupon equivalent to sort type
+        /// </summary>
+        /// <param name="sortByType"></param>
+        /// <returns></returns>
+        private static string GetColumnName(SortByType? sortByType)
+        {
+            if (sortByType == null)
+            {
+                return nameof(CouponInfo.SortNumber);
+            }
+            switch (sortByType)
+            {                
+                case SortByType.ExpiryDate:
+                    return nameof(CouponInfo.OfferExpiryDt);
+                case SortByType.BrandName:
+                    return nameof(CouponInfo.BrandName);
+                default:
+                    return nameof(CouponInfo.SortNumber);
+            }
+        }
+
         private static Expression<Func<CouponInfo, bool>> GetFiltersExpression(
             CouponSearch filters)
         {
             //this is the arguement to our lambda expression
-             var paramater = Expression.Parameter(typeof(CouponInfo), "x");
+            var paramater = Expression.Parameter(typeof(CouponInfo), "x");
 
-           // starting with 1 == 1 to create a base expression
+            // starting with 1 == 1 to create a base expression
             BinaryExpression filterExp = Expression.Equal(Expression.Constant(1), Expression.Constant(1));
             //Expression<Func<CouponInfo, bool>> filterExp = x => x.IsClipped == 0;// && x.OfferExpiryDt > DateTime.Now;
             //Expression<Func<CouponInfo, bool>> filterExp = f => f.OfferExpiryDt > DateTime.Now;
@@ -219,5 +246,20 @@ namespace Coupon.Infrastructure.Repositories
 
         }
 
+
+
+    }
+    public static partial class CouponInfoExtensions
+    {
+        public static IQueryable<T> IfThenElse<T>(
+        this IQueryable<T> elements,
+        Func<bool> condition,
+        Func<IQueryable<T>, IQueryable<T>> thenPath,
+        Func<IQueryable<T>, IQueryable<T>> elsePath)
+        {
+            return condition()
+                ? thenPath(elements)
+                : elsePath(elements);
+        }
     }
 }

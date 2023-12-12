@@ -34,7 +34,8 @@ namespace Coupon_Service.Mapper
             //search
             CreateMap<CouponFilterRequest, Coupon.Domain.Models.CouponSearch>()
                 .ForMember(dest => dest.Description, opts => opts.MapFrom(src => src.CouponDescription))
-                .ReverseMap()
+                .ForMember(dest => dest.SortOrderType, opts => opts.MapFrom(src => src.SortOrder))
+                .ForMember(dest => dest.SortByType, opts => opts.MapFrom(src => src.SortBy))
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
             CreateMap<Coupon.Domain.Models.FilteredCoupon, CouponSearchResponse>().ReverseMap().                
