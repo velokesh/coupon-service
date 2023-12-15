@@ -9,13 +9,13 @@ using Coupon.Infrastructure.Entities;
 using Moq;
 #endregion
 
-namespace Coupon.Api.Tests
+namespace Coupon.Application.Tests
 {
     public class GetRecommendedCouponsQueryHandlerTests
     {
         #region Get Recommended Coupons Query Handler Tests
         [Test, CustomAutoData()]
-        public void GetRecommendedCouponsQueryHandler_ValidInput_ShouldReturnSuccessResponse(
+        public async Task GetRecommendedCouponsQueryHandler_ValidInput_ShouldReturnSuccessResponse(
             Fixture fixture,
             [Frozen] ICouponRepository couponOperation,
             GetRecommendedCouponsQueryHandler getRecommendedCouponsQueryHandler)
@@ -24,14 +24,15 @@ namespace Coupon.Api.Tests
                 .Build<RecommendedCoupon>()
                 .Create();
 
-            var couponsResponse = fixture.Build<CouponInfo>()
+            var couponsResponse = fixture.Build<Coupons>()
+                .Without(x => x.Id)
                 .CreateMany(2);
 
             Mock.Get(couponOperation)
-                .Setup(x => x.GetCoupons())
-                .Returns(couponsResponse);
+                .Setup(x => x.GetCoupons(It.IsAny<RecommendedCoupon>()))
+                .ReturnsAsync(couponsResponse);
 
-            var response = getRecommendedCouponsQueryHandler
+            var response = await getRecommendedCouponsQueryHandler
                 .ExecuteQuery(request);
 
             Assert.That(response, Is.Not.Null);

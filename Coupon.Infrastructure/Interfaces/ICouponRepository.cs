@@ -5,10 +5,8 @@ namespace Coupon.Infrastructure.Interfaces
 {
     public interface ICouponRepository
     {
-        IEnumerable<CouponInfo> GetCoupons();
+        Task<IEnumerable<Coupons>> GetCoupons(RecommendedCoupon filters);
 
-        IEnumerable<CouponInfo> GetCoupons(RecommendedCoupon filters);
-
-        IEnumerable<CouponInfo> GetCoupons(CouponSearch filters);
+        Task<IEnumerable<Coupons>> GetCoupons(CouponSearch filters);
     }
 }

@@ -14,8 +14,8 @@ namespace Coupon.Application
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             //Dependency Injections
-            services.AddScoped<IQueryHandler<RecommendedCoupon, FilteredCoupon>, GetRecommendedCouponsQueryHandler>();
-            services.AddScoped<IQueryHandler<CouponSearch, FilteredCoupon>, SearchCouponsQueryHandler>();
+            services.AddScoped<IQueryHandler<RecommendedCoupon, Task<FilteredCoupon>>, GetRecommendedCouponsQueryHandler>();
+            services.AddScoped<IQueryHandler<CouponSearch, Task<FilteredCoupon>>, SearchCouponsQueryHandler>();
 
             return services;
         }

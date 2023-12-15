@@ -4,15 +4,10 @@ using Coupon.Domain.Models;
 using Coupon.Infrastructure.Interfaces;
 using Coupon.Infrastructure.Entities;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Coupon.Application.Queries
 {
-    public class SearchCouponsQueryHandler : IQueryHandler<CouponSearch, FilteredCoupon>
+    public class SearchCouponsQueryHandler : IQueryHandler<CouponSearch, Task<FilteredCoupon>>
     {
         #region References
         private readonly ILogger<SearchCouponsQueryHandler> _logger;
@@ -36,13 +31,12 @@ namespace Coupon.Application.Queries
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public FilteredCoupon ExecuteQuery(
+        public async Task<FilteredCoupon> ExecuteQuery(
             CouponSearch request)
         {
             _logger.LogInformation("SearchCouponsQueryHandler triggered to retrieve recommended coupons");
-
             
-            var coupons = _couponOperation.GetCoupons(request).ToList();
+            var coupons = await _couponOperation.GetCoupons(request);
             var brands = coupons.Where(x => x.BrandName != null)
                 .GroupBy(x => x.BrandName).Select(g => new CouponBrand
                 {
@@ -61,7 +55,7 @@ namespace Coupon.Application.Queries
 
             return new FilteredCoupon()
             {
-                Coupons = _mapper.Map<List<CouponInfo>, List<BaseCoupon>>(coupons),
+                Coupons = _mapper.Map<List<Coupons>, List<BaseCoupon>>(coupons.ToList()),
                 Brands = brands,
                 Category = categories,
                 PaginationInfo = new CouponPagination()

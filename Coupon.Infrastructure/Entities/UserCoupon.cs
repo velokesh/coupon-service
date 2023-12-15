@@ -1,47 +1,25 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿#region References
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+#endregion
 
 namespace Coupon.Infrastructure.Entities
 {
+    [Serializable]
     public class UserCoupon
     {
-        [Key]
-        [Column("OFFR_ID")]
-        public string OfferId { get; set; } = null!;
+        public UserCoupon(List<UserCouponDetail> user_coupon)
+        {
+            this.UserCoupons = user_coupon;
+        }
 
-        [Column("CUST_ID")]
-        public int CustomerId { get; set; }
+        [BsonElement("_id")]
+        public ObjectId _id { get; set; }
 
-        [Column("IS_ACTIVE")]
-        public int IsActive { get; set; }
+        [BsonElement("CUST_ID")]
+        public int CustId { get; set; }
 
-        [Column("IS_CLIPPED")]
-        public int IsClipped { get; set; }
-
-        [Column("CREATE_DT")]
-        public DateTime CreatedDate { get; set; }
-
-        [Column("BATCH_ID")]
-        public int BatchId { get; set; }
-
-        [Column("SORT_NUM")]
-        public int SortNumber { get; set; }
-
-        [Column("CLIPPED_DT")]
-        public DateTime ClippedDate { get; set; }
-
-        [Column("DEVICE_GUID")]
-        public string? DeviceGuid { get; set; }
-
-        [Column("COUPON_OFFR_TYP_ID")]
-        public int CouponOfferTypeId { get; set; }
-
-        [Column("OFFR_VARIANT")]
-        public string? OfferVariant { get; set; }
-
-        [Column("COUPON_CLIPPED_DT")]
-        public DateTime CouponClippedDate { get; set; }
-
+        [BsonElement("user_coupon")]
+        public List<UserCouponDetail> UserCoupons { get; set; }
     }
 }

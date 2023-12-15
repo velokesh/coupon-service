@@ -7,11 +7,9 @@ namespace Coupon.Infrastructure
 {
     public static class CouponInfrastructureServiceRegistration
     {
-        public static IServiceCollection AddCouponInfrastructureServices(this IServiceCollection services, string connectionString)
+        public static IServiceCollection AddCouponInfrastructureServices(this IServiceCollection services)
         {
-            services.AddDbContext<CouponDbContext>(option => option.UseNpgsql(connectionString));
-
-            services.AddScoped<ICouponRepository, CouponRepository>();
+            services.AddSingleton<ICouponRepository, CouponRepository>();
 
             return services;
         }

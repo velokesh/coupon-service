@@ -13,7 +13,7 @@ namespace Coupon.API.Services
         #region Declarations
         private readonly ILogger<CouponSearchService> _logger;
         private readonly IMapper _mapper;
-        private readonly IQueryHandler<CouponSearch, FilteredCoupon> _searchCoupons;
+        private readonly IQueryHandler<CouponSearch, Task<FilteredCoupon>> _searchCoupons;
         #endregion
 
         #region Public Memebers
@@ -27,7 +27,7 @@ namespace Coupon.API.Services
         public CouponSearchService(
             ILogger<CouponSearchService> logger,
             IMapper mapper,
-            IQueryHandler<CouponSearch, FilteredCoupon> searchCoupons)
+            IQueryHandler<CouponSearch, Task<FilteredCoupon>> searchCoupons)
         {
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _searchCoupons = searchCoupons ?? throw new ArgumentNullException(nameof(searchCoupons));
@@ -52,7 +52,7 @@ namespace Coupon.API.Services
             try
             {
                 var couponRequestModel = _mapper.Map<CouponSearch>(request);
-                var responseData = _searchCoupons.ExecuteQuery(couponRequestModel);
+                var responseData = await _searchCoupons.ExecuteQuery(couponRequestModel);
 
                 filteredCoupon = _mapper.Map<CouponSearchResponse>(responseData);
                 return filteredCoupon;

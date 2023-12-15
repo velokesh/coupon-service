@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Coupon.Application.Queries
 {
-    public class GetRecommendedCouponsQueryHandler : IQueryHandler<RecommendedCoupon, FilteredCoupon>
+    public class GetRecommendedCouponsQueryHandler : IQueryHandler<RecommendedCoupon, Task<FilteredCoupon>>
     {
         #region References
         private readonly ILogger<GetRecommendedCouponsQueryHandler> _logger;
@@ -33,16 +33,16 @@ namespace Coupon.Application.Queries
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public FilteredCoupon ExecuteQuery(
+        public async Task<FilteredCoupon> ExecuteQuery(
             RecommendedCoupon request)
         {
             _logger.LogInformation("GetRecommendedCouponsQueryHandler triggered to retrieve recommended coupons");
 
-            var coupons = _couponOperation.GetCoupons(request);
+            var coupons = await _couponOperation.GetCoupons(request);
 
             return new FilteredCoupon()
             {
-                Coupons = _mapper.Map<List<CouponInfo>, List<BaseCoupon>>(coupons.ToList()),
+                Coupons = _mapper.Map<List<Coupons>, List<BaseCoupon>>(coupons.ToList()),
                 Brands = new List<CouponBrand>(),
                 Category = new List<CouponCategory>(),
                 PaginationInfo = new CouponPagination() {

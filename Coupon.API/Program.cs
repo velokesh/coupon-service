@@ -27,8 +27,8 @@ try
         // c.IncludeXmlComments(filePath);
         // c.IncludeGrpcXmlComments(filePath, includeControllerXmlComments: true);
     });
-    var connectionString = builder.Configuration.GetConnectionString("CouponDb");
-    builder.Services.AddCouponInfrastructureServices(connectionString ?? throw new Exception("Connection String not found"));
+    builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("MongoDB"));
+    builder.Services.AddCouponInfrastructureServices();
     builder.Services.AddCouponApplicationServices();
     builder.Services.AddAutoMapper(typeof(Coupon_Service.Mapper.Mapping).Assembly);
     builder.Services.AddLoggingServiceV2Client();

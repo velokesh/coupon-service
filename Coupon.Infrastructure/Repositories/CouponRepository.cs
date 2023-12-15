@@ -1,172 +1,105 @@
-﻿using Coupon.Domain.Models;
+﻿#region References
+using Coupon.Domain.Models;
 using Coupon.Infrastructure.Interfaces;
 using Coupon.Infrastructure.Entities;
-using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
+using MongoDB.Driver;
+using Microsoft.Extensions.Options;
 using Coupon.Domain.Enums;
+using System.Linq.Expressions;
+#endregion
 
 namespace Coupon.Infrastructure.Repositories
 {
     public class CouponRepository : ICouponRepository
     {
-        private readonly CouponDbContext _dbContext;
+        private readonly IMongoCollection<Coupons> _couponCollection;
+        private readonly IMongoCollection<UserCoupon> _userCouponsCollection;
 
-        public CouponRepository(CouponDbContext dbContext)
+        public CouponRepository(IOptions<MongoDbSettings> mongoDBSettings)
         {
-            _dbContext = dbContext;
+            MongoClient client = new MongoClient(mongoDBSettings.Value.ConnectionURI);
+            IMongoDatabase database = client.GetDatabase(mongoDBSettings.Value.DatabaseName);
+            _couponCollection = database.GetCollection<Coupons>("coupons");
+            _userCouponsCollection = database.GetCollection<UserCoupon>("user_coupon");
         }
 
-        public IEnumerable<CouponInfo> GetCoupons()
+        public async Task<IEnumerable<Coupons>> GetCoupons(RecommendedCoupon filters)
         {
-            return _dbContext.Coupons.AsEnumerable();
-        }
+            var userId = 21100;
+            var coupons = Enumerable.Empty<Coupons>();
 
-        public IEnumerable<CouponInfo> GetCoupons(RecommendedCoupon filters)
-        {
-            // Step 1: Create CouponInfo instances
-            var coupons = _dbContext.UserCoupons
-                .Where(w => w.IsClipped == 0)
-                .Join(
-                    _dbContext.Coupons,
-                    w => w.OfferId,
-                    c => c.OfferId,
-                    (w, c) => new CouponInfo
-                    {
-                        OfferId = c.OfferId,
-                        OfferSrc = c.OfferSrc,
-                        ActivationDt = c.ActivationDt,
-                        OfferAssnCd = c.OfferAssnCd,
-                        BrandName = c.BrandName,
-                        CompanyName = c.CompanyName,
-                        OfferImg1 = c.OfferImg1,
-                        OfferImg2 = c.OfferImg2,
-                        IsAutoActivated = c.IsAutoActivated,
-                        MinBasketValue = c.MinBasketValue,
-                        MinQty = c.MinQty,
-                        MinQtyDesc = c.MinQtyDesc,
-                        MinTripCount = c.MinTripCount,
-                        ProdtOffrActDt = c.ProdtOffrActDt,
-                        OfferCd = c.OfferCd,
-                        OfferDesc = c.OfferDesc,
-                        OfferDisclaimer = c.OfferDisclaimer,
-                        ProdtOffrExpiryDt = c.ProdtOffrExpiryDt,
-                        OfferFeaturedTxt = c.OfferFeaturedTxt,
-                        OfferFinePrt = c.OfferFinePrt,
-                        OfferGs1 = c.OfferGs1,
-                        OfferSum = c.OfferSum,
-                        OfferType = c.OfferType,
-                        RedemptionFreq = c.RedemptionFreq,
-                        RedemptionLimitQty = c.RedemptionLimitQty,
-                        RewardCatagoryName = c.RewardCatagoryName,
-                        RewardOfferVal = c.RewardOfferVal,
-                        TgtType = c.TgtType,
-                        TimesShopQty = c.TimesShopQty,
-                        Visible = c.Visible,
-                        OfferToken = c.OfferToken,
-                        SortNumber = w.SortNumber
-                    })
-                .Where(w => w.ProdtOffrExpiryDt > DateTime.Now)
-                .OrderBy(w => w.SortNumber)
-                .Take(filters.NumPageRecords)
-                .ToList();
+            // Find the user by ID
+            var userFilter = Builders<UserCoupon>.Filter.Eq(u => u.CustId, userId);
+            var user = await _userCouponsCollection.Find(userFilter).FirstOrDefaultAsync();
 
-            // Step 2: Update CouponInfo instances with LinkedUpcsCount
-
-            var couponIds = coupons.Select(c => c.OfferId).ToList();
-
-            var upcCounts = _dbContext.CouponUpcXrTs
-                .Where(cu => couponIds.Contains(cu.OfferId))
-                .GroupBy(cu => cu.OfferId)
-                .Select(g => new { OfferId = g.Key, UpcCount = g.Count() }).ToList();
-
-            foreach (var coupon in coupons)
+            if (user != null)
             {
-                coupon.UpcCount = upcCounts.Where(c => c.OfferId == coupon.OfferId).Select(x => x.UpcCount).FirstOrDefault();
+                // Extract coupon IDs from user_coupons array
+                var userCoupons = user.UserCoupons
+                    .Where(uc => uc.IsClipped == 0);
+                var couponIds = userCoupons.Select(x => x.OfferId);
+
+                // Find the coupons by IDs
+                var couponFilter = Builders<Coupons>.Filter.In(c => c.OfferId, couponIds);
+                coupons = await _couponCollection.Find(couponFilter).ToListAsync();
+
+                coupons = coupons
+                    .Join(userCoupons,
+                    c => c.OfferId,
+                    uc => uc.OfferId,
+                    (c, uc) =>
+                    {
+                        c.SortNum = uc.SortNum;
+                        return c;
+                    })
+                    .Where(x => x.ProdtOffrExpiryDt > DateTime.Now)
+                    .OrderBy(c => c.SortNum)
+                    .Take(filters.NumPageRecords);
             }
 
             return coupons;
-
         }
 
-        //private static Expression<Func<CouponInfo, bool>> GetCouponsExpression(
-        //    RecommendedCoupon filters)
-        //{
-        //    //starting with 1==1 to create a base expression
-        //    BinaryExpression filterExp = Expression.Equal(Expression.Constant(1), Expression.Constant(1));
-
-        //    return (Expression<Func<CouponInfo, bool>>)Expression.Lambda(filterExp);
-        //}
-
-        public IEnumerable<CouponInfo> GetCoupons(CouponSearch filters)
+        public async Task<IEnumerable<Coupons>> GetCoupons(CouponSearch filters)
         {
-            var exp = GetFiltersExpression(filters);
-            var coupons = _dbContext.UserCoupons
-                .Where(w => w.IsClipped == 0)
-                .Join(
-                    _dbContext.Coupons,
-                    w => w.OfferId,
-                    c => c.OfferId,
-                    (w, c) => new CouponInfo
-                    {
-                        OfferId = c.OfferId,
-                        OfferSrc = c.OfferSrc,
-                        ActivationDt = c.ActivationDt,
-                        OfferAssnCd = c.OfferAssnCd,
-                        BrandName = c.BrandName,
-                        CompanyName = c.CompanyName,
-                        OfferImg1 = c.OfferImg1,
-                        OfferImg2 = c.OfferImg2,
-                        IsAutoActivated = c.IsAutoActivated,
-                        MinBasketValue = c.MinBasketValue,
-                        MinQty = c.MinQty,
-                        MinQtyDesc = c.MinQtyDesc,
-                        MinTripCount = c.MinTripCount,
-                        ProdtOffrActDt = c.ProdtOffrActDt,
-                        OfferCd = c.OfferCd,
-                        OfferDesc = c.OfferDesc,
-                        OfferDisclaimer = c.OfferDisclaimer,
-                        ProdtOffrExpiryDt = c.ProdtOffrExpiryDt,
-                        OfferFeaturedTxt = c.OfferFeaturedTxt,
-                        OfferFinePrt = c.OfferFinePrt,
-                        OfferGs1 = c.OfferGs1,
-                        OfferSum = c.OfferSum,
-                        OfferType = c.OfferType,
-                        RedemptionFreq = c.RedemptionFreq,
-                        RedemptionLimitQty = c.RedemptionLimitQty,
-                        RewardCatagoryName = c.RewardCatagoryName,
-                        RewardOfferVal = c.RewardOfferVal,
-                        TgtType = c.TgtType,
-                        TimesShopQty = c.TimesShopQty,
-                        Visible = c.Visible,
-                        OfferToken = c.OfferToken,
-                        SortNumber = w.SortNumber
-                    })
-                .Where(exp)
-                .IfThenElse(() => filters.SortOrderType == SortOrderType.Descending,
-                    e => e.OrderByDescending(w => EF.Property<object>(w, GetColumnName(filters.SortByType))),
-                    e => e.OrderBy(w => EF.Property<object>(w, GetColumnName(filters.SortByType))))
-                .Take(filters.NumPageRecords)
-                .ToList();
+            var userId = 21100;
+            var coupons = Enumerable.Empty<Coupons>();
 
-            // Step 2: Update CouponInfo instances with LinkedUpcsCount
+            // Find the user by ID
+            var userFilter = Builders<UserCoupon>.Filter.Eq(u => u.CustId, userId);
+            var user = await _userCouponsCollection.Find(userFilter).FirstOrDefaultAsync();
 
-            var couponIds = coupons.Select(c => c.OfferId).ToList();
-
-            var upcCounts = _dbContext.CouponUpcXrTs
-                .Where(cu => couponIds.Contains(cu.OfferId))
-                .GroupBy(cu => cu.OfferId)
-                .Select(g => new { OfferId = g.Key, UpcCount = g.Count() }).ToList();
-
-            foreach (var coupon in coupons)
+            if (user != null)
             {
-                coupon.UpcCount = upcCounts.Where(c => c.OfferId == coupon.OfferId).Select(x => x.UpcCount).FirstOrDefault();
+                // Extract coupon IDs from user_coupons array
+                var userCoupons = user.UserCoupons
+                    .Where(uc => uc.IsClipped == 0);
+                var couponIds = userCoupons.Select(x => x.OfferId);
+                var exp = GetFiltersExpression(filters);
+
+                // Find the coupons by IDs
+                var couponFilter = Builders<Coupons>.Filter.In(c => c.OfferId, couponIds);
+                coupons = await _couponCollection.Find(couponFilter).ToListAsync();
+
+                coupons = coupons
+                    .Join(userCoupons,
+                    c => c.OfferId,
+                    uc => uc.OfferId,
+                    (c, uc) =>
+                    {
+                        c.SortNum = uc.SortNum;
+                        return c;
+                    })
+                    .AsEnumerable()
+                    .Where(exp.Compile())
+                    .IfThenElse(() => filters.SortOrderType == SortOrderType.Descending,
+                        e => e.OrderByDescending(w => typeof(Coupons).GetProperty(GetColumnName(filters.SortByType))!.GetValue(w, null)),
+                        e => e.OrderBy(w => typeof(Coupons).GetProperty(GetColumnName(filters.SortByType))!.GetValue(w, null)))
+                    .Take(filters.NumPageRecords);
             }
 
             return coupons;
-            //var exp = GetFiltersExpression(filters);
-            //return _dbContext.Coupons
-            //    .Where(exp)
-            //    .AsEnumerable();
         }
 
         /// <summary>
@@ -178,86 +111,59 @@ namespace Coupon.Infrastructure.Repositories
         {
             if (sortByType == null)
             {
-                return nameof(CouponInfo.SortNumber);
+                return nameof(Coupons.SortNum);
             }
             switch (sortByType)
             {
                 case SortByType.OfferValue:
-                    return nameof(CouponInfo.RewardOfferVal);
+                    return nameof(Coupons.RewardOfferVal);
                 case SortByType.ExpiryDate:
-                    return nameof(CouponInfo.OfferExpiryDt);
+                    return nameof(Coupons.OfferExpiryDt);
                 case SortByType.BrandName:
-                    return nameof(CouponInfo.BrandName);
+                    return nameof(Coupons.BrandName);
                 default:
-                    return nameof(CouponInfo.SortNumber);
+                    return nameof(Coupons.SortNum);
             }
         }
 
-        private static Expression<Func<CouponInfo, bool>> GetFiltersExpression(
+        private static Expression<Func<Coupons, bool>> GetFiltersExpression(
             CouponSearch filters)
         {
             //this is the arguement to our lambda expression
-            var paramater = Expression.Parameter(typeof(CouponInfo), "x");
+            var paramater = Expression.Parameter(typeof(Coupons), "x");
 
             // starting with 1 == 1 to create a base expression
             BinaryExpression filterExp = Expression.Equal(Expression.Constant(1), Expression.Constant(1));
-            //Expression<Func<CouponInfo, bool>> filterExp = x => x.IsClipped == 0;// && x.OfferExpiryDt > DateTime.Now;
-            //Expression<Func<CouponInfo, bool>> filterExp = f => f.OfferExpiryDt > DateTime.Now;
 
             if (filters.Categories != null && filters.Categories.Any())
             {
-                Expression<Func<CouponInfo, bool>> exp = x => x.RewardCatagoryName != null && filters.Categories.Contains(x.RewardCatagoryName);
+                Expression<Func<Coupons, bool>> exp = x => x.RewardCatagoryName != null && filters.Categories.Contains(x.RewardCatagoryName);
                 filterExp = Expression.AndAlso(filterExp, Expression.Invoke(exp, paramater));
             }
 
             if (filters.Brands != null && filters.Brands.Any())
             {
-                Expression<Func<CouponInfo, bool>> exp = x => x.BrandName != null && filters.Brands.Contains(x.BrandName);
+                Expression<Func<Coupons, bool>> exp = x => x.BrandName != null && filters.Brands.Contains(x.BrandName);
                 filterExp = Expression.AndAlso(filterExp, Expression.Invoke(exp, paramater));
             }
 
             if (!string.IsNullOrWhiteSpace(filters.Description))
             {
-                Expression<Func<CouponInfo, bool>> exp = x => x.OfferDesc != null && x.OfferDesc.Contains(filters.Description);
+                Expression<Func<Coupons, bool>> exp = x => x.OfferDesc != null && x.OfferDesc.Contains(filters.Description);
                 filterExp = Expression.AndAlso(filterExp, Expression.Invoke(exp, paramater));
             }
 
-            return (Expression<Func<CouponInfo, bool>>)Expression.Lambda(filterExp, paramater);
-
-            //Expression<Func<CouponInfo, bool>> filterExp = f => f.OfferExpiryDt > DateTime.Now;
-
-            //if (filters.Categories != null && filters.Categories.Any())
-            //{
-            //    Expression<Func<CouponInfo, bool>> exp = x => x.RewardCatagoryName != null && filters.Categories.Contains(x.RewardCatagoryName);
-            //    filterExp = Expression.Lambda<Func<CouponInfo, bool>>(Expression.AndAlso(filterExp, exp.Body),filterExp.Parameters);
-            //}
-
-            //if (filters.Brands != null && filters.Brands.Any())
-            //{
-            //    Expression<Func<CouponInfo, bool>> exp = x => x.BrandName != null && filters.Brands.Contains(x.BrandName);
-            //    filterExp = Expression.Lambda<Func<CouponInfo, bool>>(Expression.AndAlso(filterExp, exp.Body), filterExp.Parameters);
-            //}
-
-            //if (!string.IsNullOrWhiteSpace(filters.Description))
-            //{
-            //    Expression<Func<CouponInfo, bool>> exp = x => x.OfferDesc != null && x.OfferDesc.Contains(filters.Description);
-            //    filterExp = Expression.Lambda<Func<CouponInfo, bool>>(Expression.AndAlso(filterExp, exp.Body), filterExp.Parameters);
-            //}
-
-            //return (Expression<Func<CouponInfo, bool>>)Expression.Lambda(filterExp);
-
+            return (Expression<Func<Coupons, bool>>)Expression.Lambda(filterExp, paramater);
         }
-
-
-
     }
+
     public static partial class CouponInfoExtensions
     {
-        public static IQueryable<T> IfThenElse<T>(
-        this IQueryable<T> elements,
+        public static IEnumerable<T> IfThenElse<T>(
+        this IEnumerable<T> elements,
         Func<bool> condition,
-        Func<IQueryable<T>, IQueryable<T>> thenPath,
-        Func<IQueryable<T>, IQueryable<T>> elsePath)
+        Func<IEnumerable<T>, IEnumerable<T>> thenPath,
+        Func<IEnumerable<T>, IEnumerable<T>> elsePath)
         {
             return condition()
                 ? thenPath(elements)
