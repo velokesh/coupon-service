@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using MongoDB.Driver;
 using Microsoft.Extensions.Options;
 using Coupon.Domain.Enums;
-using System.Linq.Expressions;
+using MongoDB.Bson;
 #endregion
 
 namespace Coupon.Infrastructure.Repositories
@@ -76,10 +76,10 @@ namespace Coupon.Infrastructure.Repositories
                 var userCoupons = user.UserCoupons
                     .Where(uc => uc.IsClipped == 0);
                 var couponIds = userCoupons.Select(x => x.OfferId);
-                var exp = GetFiltersExpression(filters);
 
                 // Find the coupons by IDs
-                var couponFilter = Builders<Coupons>.Filter.In(c => c.OfferId, couponIds);
+                var couponFilter = Builders<Coupons>.Filter.In(c => c.OfferId, couponIds)
+                    & GetFilters(filters);
                 coupons = await _couponCollection.Find(couponFilter).ToListAsync();
 
                 coupons = coupons
@@ -91,8 +91,6 @@ namespace Coupon.Infrastructure.Repositories
                         c.SortNum = uc.SortNum;
                         return c;
                     })
-                    .AsEnumerable()
-                    .Where(exp.Compile())
                     .IfThenElse(() => filters.SortOrderType == SortOrderType.Descending,
                         e => e.OrderByDescending(w => typeof(Coupons).GetProperty(GetColumnName(filters.SortByType))!.GetValue(w, null)),
                         e => e.OrderBy(w => typeof(Coupons).GetProperty(GetColumnName(filters.SortByType))!.GetValue(w, null)))
@@ -126,34 +124,26 @@ namespace Coupon.Infrastructure.Repositories
             }
         }
 
-        private static Expression<Func<Coupons, bool>> GetFiltersExpression(
-            CouponSearch filters)
+        private static FilterDefinition<Coupons> GetFilters(CouponSearch filters)
         {
-            //this is the arguement to our lambda expression
-            var paramater = Expression.Parameter(typeof(Coupons), "x");
-
-            // starting with 1 == 1 to create a base expression
-            BinaryExpression filterExp = Expression.Equal(Expression.Constant(1), Expression.Constant(1));
+            var filter = Builders<Coupons>.Filter.Empty;
 
             if (filters.Categories != null && filters.Categories.Any())
             {
-                Expression<Func<Coupons, bool>> exp = x => x.RewardCatagoryName != null && filters.Categories.Contains(x.RewardCatagoryName);
-                filterExp = Expression.AndAlso(filterExp, Expression.Invoke(exp, paramater));
+                filter &= Builders<Coupons>.Filter.In(c => c.RewardCatagoryName, filters.Categories);
             }
 
             if (filters.Brands != null && filters.Brands.Any())
             {
-                Expression<Func<Coupons, bool>> exp = x => x.BrandName != null && filters.Brands.Contains(x.BrandName);
-                filterExp = Expression.AndAlso(filterExp, Expression.Invoke(exp, paramater));
+                filter &= Builders<Coupons>.Filter.In(c => c.BrandName, filters.Brands);
             }
 
             if (!string.IsNullOrWhiteSpace(filters.Description))
             {
-                Expression<Func<Coupons, bool>> exp = x => x.OfferDesc != null && x.OfferDesc.Contains(filters.Description);
-                filterExp = Expression.AndAlso(filterExp, Expression.Invoke(exp, paramater));
+                filter &= Builders<Coupons>.Filter.Regex(c => c.OfferDesc, new BsonRegularExpression($".*{filters.Description}*."));
             }
 
-            return (Expression<Func<Coupons, bool>>)Expression.Lambda(filterExp, paramater);
+            return filter;
         }
     }
 
